@@ -2,7 +2,7 @@
 <html lang="en">
 <html xmlns:th="https://www.thymeleaf.org">
 <head>
-    <title>Bootstrap Example</title>
+    <title>Login page</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -18,7 +18,7 @@
     </a>
     <div class="pull-right ml-auto" style="width:100%;">
         <a class="btn btn-outline-light mr-2 " href="#">Upload meme </a>
-        <a class="btn btn-danger ml-" href="#">Log in</a>
+        <a th:href="@{/login}" class="btn btn-danger ml-">Log in</a>
     </div>
 </nav>
 
