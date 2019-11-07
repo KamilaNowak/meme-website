@@ -11,18 +11,4 @@ public class Controller {
         return "main-page";
     }
 
-    @GetMapping("/login")
-    public String showLoginPage(){
-        return "login-page";
-    }
-
-    @GetMapping("/register")
-    public String showRegisterPage(){
-        return "register-page";
-    }
-
-    @GetMapping("/proceedLogin")
-    public String proceedLogin(){
-        return  null;
-    }
 }

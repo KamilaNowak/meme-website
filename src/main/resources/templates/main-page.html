@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <html xmlns:th="https://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <title>Login page</title>
     <meta charset="utf-8">
@@ -20,8 +21,17 @@
         <a class="btn btn-outline-light mr-2 " href="#">Upload meme </a>
         <a th:href="@{/login}" class="btn btn-danger ml-">Log in</a>
     </div>
+        </div>
+    </div>
+
 </nav>
 
+Logged user: <span sec:authentication="name"></span>
+Roles: <span sec:authentication="principal.authorities"></span>
+
+<div th:if="${session.account}" >
+    <p th:text="'First name: ' + ${session.account.name} + ', Email: ' + ${session.account.email}"></p>
+</div>
 
 </body>
 </html>

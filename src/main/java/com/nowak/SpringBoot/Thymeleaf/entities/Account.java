@@ -3,6 +3,8 @@ package com.nowak.SpringBoot.Thymeleaf.entities;
 import org.hibernate.annotations.Columns;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import java.util.Collection;
 
 @Entity
 @Table(name="account")
@@ -16,11 +18,35 @@ public class Account {
     @Column(name="name")
     private String name;
 
-    @Column(name="surname")
-    private String surname;
+    @Column(name="password")
+    @Transient
+    private String password;
 
-    @Column(name="PID")
-    private long PID;
+    @Column(name="email")
+    private String email;
+
+    @Column(name = "confirm_token")
+    private String confirmToken;
+
+    public String getConfirmToken() {
+        return confirmToken;
+    }
+
+    public void setConfirmToken(String confirmToken) {
+        this.confirmToken = confirmToken;
+    }
+
+    @ManyToMany(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name="accounts_and_roles",joinColumns = @JoinColumn(name="id_name"), inverseJoinColumns = @JoinColumn(name="id_authority"))
+    private Collection<Authority>authorities;
+
+    public Collection<Authority> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(Collection<Authority> authorities) {
+        this.authorities = authorities;
+    }
 
     public int getId() {
         return id;
@@ -38,19 +64,19 @@ public class Account {
         this.name = name;
     }
 
-    public String getSurname() {
-        return surname;
+    public String getPassword() {
+        return password;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public long getPID() {
-        return PID;
+    public String getEmail() {
+        return email;
     }
 
-    public void setPID(long PID) {
-        this.PID = PID;
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
