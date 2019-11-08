@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://user.fontawesome.com/releases/v5.0.8/css/solid.css">
+
+
+    <style>
+        .image-bg {
+            background-image: url('https://i.kym-cdn.com/photos/images/original/000/496/283/e6c.jpg');
+            height: 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            position: fixed;
+            min-width: 100%;
+            min-height: 100%;
+        }
+
+        .main-section {
+            margin: 0 auto;
+            margin-top: 130px;
+        }
+
+        .modal-content {
+            opacity: .9;
+            padding: 0 10px;
+            border-radius: 18px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group input {
+            border-radius: 15px;
+            font-size: 20px;
+        }
+
+        .form-group button {
+            border-radius: 15px;
+        }
+
+
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <a class="navbar-brand" th:href="@{/}">
+        <img src="https://i.imgur.com/t9gh16j.png" alt="logo" style="width:110px; ">
+    </a>
+    <div class="pull-right ml-auto" style="width:100%;">
+        <a class="btn btn-outline-light mr-2 " th:href="@{/upload}">Upload meme</a>
+        <a th:href="@{/}" class="btn btn-danger ml-">Main page</a>
+    </div>
+</nav>
+
+<div class="image-bg">
+    <div class="modal-dialog">
+        <div class="col-sm-9 main-section">
+            <div class="modal-content text-center">
+                <br>
+                <div class="text-center">
+                    <img src="https://i.imgur.com/t9gh16j.png" style="width:170px;">
+                </div>
+
+                <h3>Log in</h3>
+                <p>Enter credentials and hit the button</p>
+
+
+                <div class="col-12 form-input ">
+                    <form th:action="@{/proceedLogin}" method="post">
+                        <br>
+                        <div class="form-group">
+                            <input type="text" id="username" name="username" class="form-control" placeholder="Name">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" id="password" name="password" class="form-control" placeholder="Password">
+                        </div>
+
+                        <hr>
+                        <div class="form-group text-center">
+                            <button type="submit" class="btn btn-outline-success"> Login</button>
+                        </div>
+                    </form>
+                        <form th:action="@{/register}">
+                        <div class="form-group">
+                            <button type="submit"  class="btn btn-info" > Register</button>
+                        </div>
+                        </form>
+                    <a th:href="@{/reset}">Forgot password?</a><br>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+</body>
+</html>
