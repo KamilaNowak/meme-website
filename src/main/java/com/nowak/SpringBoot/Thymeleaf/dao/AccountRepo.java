@@ -12,9 +12,8 @@ public interface AccountRepo extends JpaRepository<Account,Integer>{
     @Query("select a from Account a where a.name= ?1")
     Account findByName(String name);
 
+
     Account findByEmail(String email);
     Account findByConfirmToken(String confirmToken);
 
-//    public Account findByUserName(String userName);
-//    public void save(Account user);
 }

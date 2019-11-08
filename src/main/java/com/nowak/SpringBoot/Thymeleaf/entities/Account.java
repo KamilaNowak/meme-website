@@ -19,7 +19,6 @@ public class Account {
     private String name;
 
     @Column(name="password")
-    @Transient
     private String password;
 
     @Column(name="email")

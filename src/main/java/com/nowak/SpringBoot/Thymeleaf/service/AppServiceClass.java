@@ -33,22 +33,6 @@ public class AppServiceClass implements AppService {
     @Autowired
     private BCryptPasswordEncoder encoder;
 
-//    @Override
-//    @Transactional
-//    public List<Account> findAll() {
-//        return accountRepo.findAll();
-//    }
-
-//    @Override
-//    @Transactional
-//    public Account findById(int id) {
-//        Optional<Account> optionalAccount = accountRepo.findById(id);
-//        Account account =null;
-//        if(optionalAccount.isPresent()){
-//            account=optionalAccount.get();
-//        }
-//        return account;
-//    }
 
     @Override
     @Transactional
@@ -57,25 +41,12 @@ public class AppServiceClass implements AppService {
         return accountRepo.findByName(userName);
     }
 
-    //    @Override
-//    @Transactional
-//    public void save(Account account) {
-//        System.out.println("saving account...");
-//        accountRepo.save(account);
-//    }
     @Override
     @Transactional
     public void save(Account account) {
         System.out.println("saving account...");
         accountRepo.save(account);
     }
-//}
-//
-//    @Override
-//    @Transactional
-//    public void deleteById(int id) {
-//        accountRepo.deleteById(id);
-//    }
 
     @Override
     public Account convertToAccount(AccountModel accountModel) {

@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
 <html xmlns:th="https://www.thymeleaf.org">
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <title>Login page</title>
     <meta charset="utf-8">
@@ -14,11 +13,11 @@
 <body>
 
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-    <a class="navbar-brand" href="#">
+    <a class="navbar-brand" th:href="@{/}">
         <img src="https://i.imgur.com/t9gh16j.png" alt="logo" style="width:110px;">
     </a>
     <div class="pull-right ml-auto" style="width:100%;">
-        <a class="btn btn-outline-light mr-2 " href="#">Upload meme </a>
+        <a th:href="@{/upload}" class="btn btn-outline-light mr-2">Upload meme </a>
         <a th:href="@{/login}" class="btn btn-danger ml-">Log in</a>
     </div>
         </div>

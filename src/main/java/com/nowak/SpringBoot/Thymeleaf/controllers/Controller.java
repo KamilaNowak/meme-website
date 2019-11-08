@@ -11,4 +11,8 @@ public class Controller {
         return "main-page";
     }
 
+    @GetMapping("/upload")
+    public String showUploadMemePage(){
+        return "upload-meme";
+    }
 }

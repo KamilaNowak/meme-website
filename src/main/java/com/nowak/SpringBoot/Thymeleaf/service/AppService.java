@@ -9,11 +9,8 @@ import java.util.List;
 
 public interface AppService extends UserDetailsService {
 
-//    List<Account> findAll();
-//    Account findById(int id);
     Account findByName(String userName);
     void save(Account account);
-//    void deleteById(int id);
     Account convertToAccount(AccountModel accountModel);
     Account findByEmail(String email);
     Account findByConfirmToken(String confirmToken);
