@@ -6,7 +6,9 @@ import com.nowak.SpringBoot.Thymeleaf.entities.Account;
 import com.nowak.SpringBoot.Thymeleaf.entities.Authority;
 import com.nowak.SpringBoot.Thymeleaf.models.AccountModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,7 +23,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-
 public class AppServiceClass implements AppService {
 
     @Autowired
@@ -65,6 +66,13 @@ public class AppServiceClass implements AppService {
     @Override
     public Account findByConfirmToken(String confirmToken) {
         return accountRepo.findByConfirmToken(confirmToken);
+    }
+
+    @Override
+    public Account getLoggedAccount() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Account account= findByName(authentication.getName());
+        return account;
     }
 
     private Collection<SimpleGrantedAuthority> mapToAuthorities(Collection<Authority> authorities) {

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://user.fontawesome.com/releases/v5.0.8/css/solid.css">
+
+    <style>
+        .image-bg {
+            background-image: url('https://wallpaperspot.net/images/2019/07/22/pepe-wallpaper-hd-2019-7.jpg');
+            height: 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            position: fixed;
+            min-width: 100%;
+            min-height: 100%;
+        }
+
+        .main-section {
+            margin: 0 auto;
+            margin-top: 50px;
+        }
+
+        .modal-content {
+            opacity: .9;
+            padding: 0 10px;
+            border-radius: 18px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group input {
+            border-radius: 15px;
+            font-size: 20px;
+        }
+
+        .form-group button {
+            border-radius: 15px;
+        }
+
+
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <a class="navbar-brand" th:href="@{/}">
+        <img src="https://i.imgur.com/t9gh16j.png" alt="logo" style="width:110px; ">
+    </a>
+    <div class="pull-right ml-auto" style="width:100%;">
+        <a class="btn btn-outline-light mr-2 " th:href="@{/upload}">Upload meme</a>
+        <a th:href="@{/}" class="btn btn-danger ml-">Main page</a>
+    </div>
+</nav>
+
+<div class="image-bg">
+    <div class="modal-dialog modal-lg">
+        <div class="main-section">
+            <div class="modal-content text-center">
+                <br>
+
+                <ul class="nav nav-pills" style="margin-left:12px" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="pill" href="#details">Account Detail</a>
+
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " data-toggle="pill" href="#memes">My Memes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " data-toggle="pill" href="#liked">Liked Memes</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div id="details" class="tab-pane fade in active">
+                        <div class="container mt-3">
+                            <ul class="list-group" style="max-height:auto">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Name:  <span th:text="${account.name}"/>
+                                    <a class="btn btn-outline-warning" style="border-radius: 55px;" th:href="@{/account/edit}">Change</a>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Password:  <span class="badge badge-danger badge-pill">NOT TO DISPLAY</span>
+                                    <a class="btn btn-outline-warning" style="border-radius: 55px;" th:href="@{/reset}">Change</a>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    E-mail: <span th:text="${account.email}"/>
+                                    <a class="btn btn-outline-warning" style="border-radius: 55px;" th:href="@{/account/edit}">Change</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div id="memes" class="tab-pane fade in active">
+                        memes
+                    </div>
+
+                    <div id="liked" class="tab-pane fade in active">
+                        liked
+                    </div>
+                </div>
+                <br>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

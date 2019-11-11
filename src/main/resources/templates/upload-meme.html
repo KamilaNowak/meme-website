@@ -57,6 +57,7 @@
     <div class="pull-right ml-auto" style="width:100%;">
         <a class="btn btn-outline-light mr-2 " th:href="@{/upload}">Upload meme</a>
         <a th:href="@{/}" class="btn btn-danger ml-">Main page</a>
+        <a th:href="@{/account}" class="btn btn-danger">Account</a>
     </div>
 </nav>
 
@@ -71,24 +72,20 @@
                 </div>
                 <div class="text-center">
                     <h3>Upload meme</h3>
-
-
                     <div class="form-group">
                         <div class="col-xs-12">
                             <div>
-
+                                <div th:if="${upload_error}" class="alert alert-danger col-xs-10" role="alert" th:text="${upload_error}"></div>
+                                <div th:if="${upload_success}" class="alert alert-success col-xs-10" role="alert" th:text="${upload_success}"></div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-12 form-input">
-                    <form th:action="@{/}"  method="post">
+                    <form th:action="@{/upload}" method="post" enctype="multipart/form-data">
 
                         <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Meme Title">
-                        </div>
-                        <div class="form-group">
-                            <button class="btn btn-dark">Upload file</button>
+                            <input type="file" name="file"/>
                         </div>
                         <hr>
                         <div class="text-center">

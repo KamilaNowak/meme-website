@@ -71,32 +71,29 @@
                 <div class="text-center">
                     <img src="https://i.imgur.com/t9gh16j.png" style="width:170px;">
                 </div>
-
-                <h3>Log in</h3>
-                <p>Enter credentials and hit the button</p>
-
-
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <div>
+                            <div th:if="${edit_error}" class="alert alert-danger col-xs-10" role="alert" th:text="${edit_error}"></div>
+                            <div th:if="${edit_success}" class="alert alert-success col-xs-10" role="alert" th:text="${edit_success}"></div>
+                        </div>
+                    </div>
+                </div>
+                <h3>Update account</h3>
                 <div class="col-12 form-input ">
-                    <form th:action="@{/proceedLogin}" method="post">
+                    <form th:action="@{/proceedEdit}" th:object="${account}" method="post">
                         <br>
                         <div class="form-group">
-                            <input type="text" id="username" name="username" class="form-control" placeholder="Name">
+                            <input type="text"  th:field="*{name}" class="form-control" placeholder="Name">
                         </div>
                         <div class="form-group">
-                            <input type="password" id="password" name="password" class="form-control" placeholder="Password">
+                            <input type="text"  th:field="*{email}" class="form-control" placeholder="E-mail">
                         </div>
-
                         <hr>
                         <div class="form-group text-center">
-                            <button type="submit" class="btn btn-outline-success"> Login</button>
+                            <button type="submit" class="btn btn-outline-success"> Change</button>
                         </div>
                     </form>
-                        <form th:action="@{/register}">
-                        <div class="form-group">
-                            <button type="submit"  class="btn btn-info" > Register</button>
-                        </div>
-                        </form>
-                    <a th:href="@{/reset}">Forgot password?</a><br>
                 </div>
             </div>
         </div>

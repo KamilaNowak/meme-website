@@ -14,4 +14,5 @@ public interface AppService extends UserDetailsService {
     Account convertToAccount(AccountModel accountModel);
     Account findByEmail(String email);
     Account findByConfirmToken(String confirmToken);
+    Account getLoggedAccount();
 }
