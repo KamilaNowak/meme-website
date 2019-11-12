@@ -2,8 +2,10 @@ package com.nowak.SpringBoot.Thymeleaf.service;
 
 import com.nowak.SpringBoot.Thymeleaf.dao.AccountRepo;
 import com.nowak.SpringBoot.Thymeleaf.dao.AuthorityRepo;
+import com.nowak.SpringBoot.Thymeleaf.dao.FileRepo;
 import com.nowak.SpringBoot.Thymeleaf.entities.Account;
 import com.nowak.SpringBoot.Thymeleaf.entities.Authority;
+import com.nowak.SpringBoot.Thymeleaf.entities.File;
 import com.nowak.SpringBoot.Thymeleaf.models.AccountModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -30,6 +32,9 @@ public class AppServiceClass implements AppService {
 
     @Autowired
     private AuthorityRepo authorityRepo;
+
+    @Autowired
+    private FileRepo fileRepo;
 
     @Autowired
     private BCryptPasswordEncoder encoder;
@@ -71,8 +76,49 @@ public class AppServiceClass implements AppService {
     @Override
     public Account getLoggedAccount() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Account account= findByName(authentication.getName());
+        Account account = findByName(authentication.getName());
         return account;
+    }
+
+    @Override
+    @Transactional
+    public File findByUserID(int id) {
+        return fileRepo.findByUserID(id);
+    }
+
+    @Override
+    @Transactional
+    public File findByTitle(String title) {
+        return fileRepo.findByTitle(title);
+    }
+
+    @Override
+    public void saveFile(File file) {
+        fileRepo.save(file);
+    }
+
+    @Override
+    public void deleteFileByTitle(String title) {
+        File file = fileRepo.findByTitle(title);
+        fileRepo.deleteFileById(file.getId());
+    }
+
+    @Override
+    public void deleteFileById(int id) {
+        fileRepo.deleteFileById(id);
+    }
+
+    @Override
+    public List<File> findAllByUserID(int id) {
+        Account account= getLoggedAccount();
+        int accID = account.getId();
+        List<File> files = fileRepo.findAllByUserID(accID);
+        return files;
+    }
+
+    @Override
+    public List<File> findAll() {
+        return fileRepo.findAll();
     }
 
     private Collection<SimpleGrantedAuthority> mapToAuthorities(Collection<Authority> authorities) {
@@ -89,4 +135,5 @@ public class AppServiceClass implements AppService {
             throw new UsernameNotFoundException("Account not found");
         return new User(account.getName(), account.getPassword(), mapToAuthorities(account.getAuthorities()));
     }
+
 }

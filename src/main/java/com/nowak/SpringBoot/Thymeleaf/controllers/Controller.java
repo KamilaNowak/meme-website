@@ -1,6 +1,7 @@
 package com.nowak.SpringBoot.Thymeleaf.controllers;
 
 import com.nowak.SpringBoot.Thymeleaf.entities.Account;
+import com.nowak.SpringBoot.Thymeleaf.entities.File;
 import com.nowak.SpringBoot.Thymeleaf.models.AccountModel;
 import com.nowak.SpringBoot.Thymeleaf.models.MemeModel;
 import com.nowak.SpringBoot.Thymeleaf.service.AppService;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @org.springframework.stereotype.Controller
@@ -23,12 +26,22 @@ public class Controller {
     private AppService appService;
 
     @GetMapping("/")
-    public String showMain() {
+    public String showMain(Model model) {
+        List<File> files = appService.findAll();
+        List<String> ss = new ArrayList<>();
+        for (int i = 0; i < files.size(); i++) {
+            String s = files.get(i).getPath().intern();
+            s=s+" ";
+            System.out.println("W metodzie:"+ s);
+            ss.add(s);
+        }
+        model.addAttribute("files", files);
         return "main-page";
     }
 
     @GetMapping("/add-meme")
     public String showUploadMemePage(Model model, HttpServletRequest httpServletRequest) {
+        model.addAttribute("memeModel", new MemeModel());
         return "upload-meme";
     }
 
@@ -44,7 +57,7 @@ public class Controller {
         return "account-edit";
     }
 
-    @RequestMapping(value = "/proceedEdit",method = RequestMethod.POST)
+    @RequestMapping(value = "/proceedEdit", method = RequestMethod.POST)
     public String proceedEditAccount(@Valid @ModelAttribute("account") AccountModel accountModel, BindingResult bindingResult, Model model) {
         Account existUser = appService.findByName(accountModel.getName());
         if (existUser != null) {
@@ -73,14 +86,14 @@ public class Controller {
 //                appService.save(account);
 //            }
 //            if(accountModel.getName()!=null && accountModel.getEmail()!=null){
-                String name = accountModel.getName();
-                String email = accountModel.getEmail();
-                Account account = appService.getLoggedAccount();
-                account.setName(name);
-                account.setEmail(email);
-                appService.save(account);
-           // }
-            model.addAttribute("edit_success","Account updated");
+            String name = accountModel.getName();
+            String email = accountModel.getEmail();
+            Account account = appService.getLoggedAccount();
+            account.setName(name);
+            account.setEmail(email);
+            appService.save(account);
+            // }
+            model.addAttribute("edit_success", "Account updated");
         }
         return "account-edit";
     }

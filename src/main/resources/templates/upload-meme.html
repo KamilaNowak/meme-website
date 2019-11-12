@@ -36,10 +36,6 @@
             margin-bottom: 20px;
         }
 
-        .form-group input {
-            font-size: 20px;
-            border-radius: 15px;
-        }
         .form-group button{
             border-radius: 15px;
         }
@@ -82,9 +78,13 @@
                     </div>
                 </div>
                 <div class="col-12 form-input">
-                    <form th:action="@{/upload}" method="post" enctype="multipart/form-data">
+                    <form th:action="@{/upload}" method="post" enctype="multipart/form-data" th:object="${memeModel}">
 
                         <div class="form-group">
+                            <input type="text" th:field="*{title}" placeholder=" Title" style="  border-radius: 15px; font-size: 25px;">
+                            <br>
+                        </div>
+                        <div class="form-group" style="border-radius: 0px;">
                             <input type="file" name="file"/>
                         </div>
                         <hr>
@@ -94,7 +94,6 @@
                             </div>
                         </div>
                     </form>
-
                 </div>
             </div>
         </div>

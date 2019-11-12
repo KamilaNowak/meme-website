@@ -28,12 +28,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder managerBuilder) throws Exception {
         managerBuilder.authenticationProvider(authenticationProvider());
     }
-
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/").permitAll()
+                .antMatchers("/add-meme/**").permitAll()
+                .antMatchers("/account/**").hasRole("USER")
                 .and()
                 .formLogin()
                     .loginPage("/login")
