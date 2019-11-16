@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface FileRepo extends JpaRepository<File, Integer> {
 
-    File findByUserID(int id);
+
 
     File findByTitle(String title);
 
@@ -18,7 +18,8 @@ public interface FileRepo extends JpaRepository<File, Integer> {
 
     void deleteFileById(int id);
 
-    List<File> findAllByUserID(int id);
 
     List<File> findAll();
+
+
 }

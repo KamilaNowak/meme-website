@@ -1,7 +1,9 @@
 package com.nowak.SpringBoot.Thymeleaf.service;
 
 import com.nowak.SpringBoot.Thymeleaf.entities.Account;
+import com.nowak.SpringBoot.Thymeleaf.entities.Comments;
 import com.nowak.SpringBoot.Thymeleaf.entities.File;
+import com.nowak.SpringBoot.Thymeleaf.entities.Reported;
 import com.nowak.SpringBoot.Thymeleaf.models.AccountModel;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -22,8 +24,6 @@ public interface AppService extends UserDetailsService {
 
     Account getLoggedAccount();
 
-    File findByUserID(int id);
-
     File findByTitle(String title);
 
     void saveFile(File file);
@@ -32,9 +32,19 @@ public interface AppService extends UserDetailsService {
 
     void deleteFileById(int id);
 
-    List<File> findAllByUserID(int id);
-
     List<File> findAll();
+
+    File findById(int id);
+
+    void save(Comments comment);
+
+    List<Comments> findAllByFileID(int id);
+
+    List<Comments> findAllComments();
+
+    List<Comments> commentsFromFile(List<File> files);
+
+    void save(Reported reported);
 
 
 }

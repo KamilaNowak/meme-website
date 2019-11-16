@@ -75,6 +75,9 @@
                 <h3>Log in</h3>
                 <p>Enter credentials and hit the button</p>
 
+                <div  class="alert alert-danger col-xs-10" role="alert"  id="errors" th:if="${(param.error != null)}">
+                    Username or password is incorrect
+                </div>
 
                 <div class="col-12 form-input ">
                     <form th:action="@{/proceedLogin}" method="post">

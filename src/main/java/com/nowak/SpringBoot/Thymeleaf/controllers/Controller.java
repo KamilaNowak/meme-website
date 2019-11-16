@@ -1,17 +1,16 @@
 package com.nowak.SpringBoot.Thymeleaf.controllers;
 
 import com.nowak.SpringBoot.Thymeleaf.entities.Account;
+import com.nowak.SpringBoot.Thymeleaf.entities.Comments;
 import com.nowak.SpringBoot.Thymeleaf.entities.File;
 import com.nowak.SpringBoot.Thymeleaf.models.AccountModel;
+import com.nowak.SpringBoot.Thymeleaf.models.CommentModel;
 import com.nowak.SpringBoot.Thymeleaf.models.MemeModel;
 import com.nowak.SpringBoot.Thymeleaf.service.AppService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -28,14 +27,10 @@ public class Controller {
     @GetMapping("/")
     public String showMain(Model model) {
         List<File> files = appService.findAll();
-        List<String> ss = new ArrayList<>();
-        for (int i = 0; i < files.size(); i++) {
-            String s = files.get(i).getPath().intern();
-            s=s+" ";
-            System.out.println("W metodzie:"+ s);
-            ss.add(s);
-        }
+        List<Comments> comments = appService.findAllComments();
         model.addAttribute("files", files);
+        model.addAttribute("cmtModel", new CommentModel());
+        model.addAttribute("comments", comments);
         return "main-page";
     }
 
@@ -97,4 +92,5 @@ public class Controller {
         }
         return "account-edit";
     }
+
 }

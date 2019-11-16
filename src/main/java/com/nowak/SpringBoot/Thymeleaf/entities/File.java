@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Date;
 
 @Entity
 @Table(name="files")
@@ -16,8 +17,8 @@ public class File {
     @Column(name = "id")
     private int id;
 
-    @Column(name="user_id")
-    private int userID;
+    @Column(name="user_name")
+    private String userNick;
 
     @Column(name ="path")
     private String path;
@@ -26,15 +27,41 @@ public class File {
     private String title;
 
     @Column(name="likes")
-    private String likes;
+    private int likes;
+
+    @Column(name="dislikes")
+    private int dislikes;
+
+    @Column(name="date",columnDefinition = "DATETIME")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date data;
 
     public File() {
     }
 
-    public File(String path, String title, String likes) {
+    public File(String userNick, String path, String title, int likes, int dislikes, Date data) {
+        this.userNick = userNick;
         this.path = path;
         this.title = title;
         this.likes = likes;
+        this.dislikes = dislikes;
+        this.data = data;
+    }
+
+    public int getDislikes() {
+        return dislikes;
+    }
+
+    public void setDislikes(int dislikes) {
+        this.dislikes = dislikes;
+    }
+
+    public Date getData() {
+        return data;
+    }
+
+    public void setData(Date data) {
+        this.data = data;
     }
 
     public int getId() {
@@ -45,12 +72,12 @@ public class File {
         this.id = id;
     }
 
-    public int getUserID() {
-        return userID;
+    public String getUserNick() {
+        return userNick;
     }
 
-    public void setUserID(int userID) {
-        this.userID = userID;
+    public void setUserNick(String userNick) {
+        this.userNick = userNick;
     }
 
     public String getPath() {
@@ -69,11 +96,11 @@ public class File {
         this.title = title;
     }
 
-    public String getLikes() {
+    public int getLikes() {
         return likes;
     }
 
-    public void setLikes(String likes) {
+    public void setLikes(int likes) {
         this.likes = likes;
     }
 }

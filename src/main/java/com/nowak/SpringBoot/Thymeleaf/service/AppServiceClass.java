@@ -1,11 +1,7 @@
 package com.nowak.SpringBoot.Thymeleaf.service;
 
-import com.nowak.SpringBoot.Thymeleaf.dao.AccountRepo;
-import com.nowak.SpringBoot.Thymeleaf.dao.AuthorityRepo;
-import com.nowak.SpringBoot.Thymeleaf.dao.FileRepo;
-import com.nowak.SpringBoot.Thymeleaf.entities.Account;
-import com.nowak.SpringBoot.Thymeleaf.entities.Authority;
-import com.nowak.SpringBoot.Thymeleaf.entities.File;
+import com.nowak.SpringBoot.Thymeleaf.dao.*;
+import com.nowak.SpringBoot.Thymeleaf.entities.*;
 import com.nowak.SpringBoot.Thymeleaf.models.AccountModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -18,10 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,13 +30,17 @@ public class AppServiceClass implements AppService {
     private FileRepo fileRepo;
 
     @Autowired
-    private BCryptPasswordEncoder encoder;
+    private CommentRepo commentRepo;
 
+    @Autowired
+    private ReportedRepo reportedRepo;
+
+    @Autowired
+    private BCryptPasswordEncoder encoder;
 
     @Override
     @Transactional
     public Account findByName(String userName) {
-        // return accountRepo.findByUserName(userName);
         return accountRepo.findByName(userName);
     }
 
@@ -80,11 +77,6 @@ public class AppServiceClass implements AppService {
         return account;
     }
 
-    @Override
-    @Transactional
-    public File findByUserID(int id) {
-        return fileRepo.findByUserID(id);
-    }
 
     @Override
     @Transactional
@@ -108,17 +100,48 @@ public class AppServiceClass implements AppService {
         fileRepo.deleteFileById(id);
     }
 
-    @Override
-    public List<File> findAllByUserID(int id) {
-        Account account= getLoggedAccount();
-        int accID = account.getId();
-        List<File> files = fileRepo.findAllByUserID(accID);
-        return files;
-    }
 
     @Override
     public List<File> findAll() {
         return fileRepo.findAll();
+    }
+
+    @Override
+    public File findById(int id) {
+        Optional<File> f= fileRepo.findById(id);
+        File file=null;
+        if(f.isPresent()){
+            file=f.get();
+        }
+        return file;
+    }
+
+    @Override
+    public void save(Comments comment) {
+        comment.setDate(new Date());
+        commentRepo.save(comment);
+    }
+
+    @Override
+    public List<Comments> findAllByFileID(int id) {
+        return commentRepo.findAllByFileID(id);
+    }
+
+    @Override
+    public List<Comments> findAllComments() {
+        return commentRepo.findAll();
+    }
+
+    @Override
+    public List<Comments> commentsFromFile(List<File> files) {
+        // map (fileId, commentId);
+        Map<File,Comments> map = new HashMap<File, Comments>();
+        return null;
+    }
+
+    @Override
+    public void save(Reported reported) {
+        reportedRepo.save(reported);
     }
 
     private Collection<SimpleGrantedAuthority> mapToAuthorities(Collection<Authority> authorities) {
@@ -129,7 +152,6 @@ public class AppServiceClass implements AppService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        System.out.println("Loading user....");
         Account account = accountRepo.findByName(s);
         if (account == null)
             throw new UsernameNotFoundException("Account not found");

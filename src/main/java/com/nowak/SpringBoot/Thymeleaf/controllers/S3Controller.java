@@ -26,6 +26,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DateFormat;
+import java.util.Date;
 
 @Controller
 public class S3Controller {
@@ -84,14 +86,13 @@ public class S3Controller {
 
             model.addAttribute("file", path);
             httpServletRequest.setAttribute("file", path);
-            model.addAttribute("upload_success", "Uploaded successfully. \nLink: " + path);
+            model.addAttribute("upload_success", "Uploaded successfully");
 
             Account account = appService.getLoggedAccount();
-            int accountID = account.getId();
-            File appFile = new File();
-            appFile.setUserID(accountID);
-            appFile.setTitle(memeModel.getTitle());
-            appFile.setPath(path);
+            String accName = account.getName();
+            Date date = new Date();
+            String str =DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(date);
+            File appFile = new File(accName,path,memeModel.getTitle(),0,0, date);
             appService.saveFile(appFile);
 
         } catch (IOException e) {
