@@ -3,6 +3,7 @@ package com.nowak.SpringBoot.Thymeleaf.entities;
 import org.springframework.stereotype.Controller;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name="reported")
@@ -18,6 +19,54 @@ public class Reported {
 
     @Column(name="reporting_user")
     private String reportingUser;
+
+    private Date addedDate;
+    private String filePath;
+    private String addingUser;
+    private String fileTitle;
+
+    public Reported() {
+    }
+
+    public Reported(String reportingUser, Date addedDate, String filePath, String addingUser,String fileTitle) {
+        this.reportingUser = reportingUser;
+        this.addedDate = addedDate;
+        this.filePath = filePath;
+        this.addingUser = addingUser;
+        this.fileTitle= fileTitle;
+    }
+
+    public String getFileTitle() {
+        return fileTitle;
+    }
+
+    public void setFileTitle(String fileTitle) {
+        this.fileTitle = fileTitle;
+    }
+
+    public Date getAddedDate() {
+        return addedDate;
+    }
+
+    public void setAddedDate(Date addedDate) {
+        this.addedDate = addedDate;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
+    public String getAddingUser() {
+        return addingUser;
+    }
+
+    public void setAddingUser(String addingUser) {
+        this.addingUser = addingUser;
+    }
 
     public int getId() {
         return id;

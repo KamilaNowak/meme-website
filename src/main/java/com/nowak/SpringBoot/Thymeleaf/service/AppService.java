@@ -1,9 +1,6 @@
 package com.nowak.SpringBoot.Thymeleaf.service;
 
-import com.nowak.SpringBoot.Thymeleaf.entities.Account;
-import com.nowak.SpringBoot.Thymeleaf.entities.Comments;
-import com.nowak.SpringBoot.Thymeleaf.entities.File;
-import com.nowak.SpringBoot.Thymeleaf.entities.Reported;
+import com.nowak.SpringBoot.Thymeleaf.entities.*;
 import com.nowak.SpringBoot.Thymeleaf.models.AccountModel;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -16,6 +13,8 @@ public interface AppService extends UserDetailsService {
 
     void save(Account account);
 
+    Account findAccountById(int id);
+
     Account convertToAccount(AccountModel accountModel);
 
     Account findByEmail(String email);
@@ -23,6 +22,8 @@ public interface AppService extends UserDetailsService {
     Account findByConfirmToken(String confirmToken);
 
     Account getLoggedAccount();
+
+    List<Account> findAllAccounts();
 
     File findByTitle(String title);
 
@@ -45,6 +46,14 @@ public interface AppService extends UserDetailsService {
     List<Comments> commentsFromFile(List<File> files);
 
     void save(Reported reported);
+
+    List<Reported> findAllReported();
+
+    List<File> findAllByUserNick(String nick);
+
+    void saveReportedComment(ReportedComments reportedComment);
+
+    Comments findCommentById(int id);
 
 
 }

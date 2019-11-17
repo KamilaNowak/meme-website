@@ -39,10 +39,6 @@
             margin-bottom: 20px;
         }
 
-        .form-group input {
-            border-radius: 15px;
-            font-size: 20px;
-        }
 
         .form-group button {
             border-radius: 15px;
@@ -57,9 +53,9 @@
         <img src="https://i.imgur.com/t9gh16j.png" alt="logo" style="width:110px; ">
     </a>
     <div class="pull-right ml-auto" style="width:100%;">
-        <a class="btn btn-outline-light mr-2 " th:href="@{/upload}">Upload meme</a>
-        <a th:href="@{/}" class="btn btn-danger ml-2">Main page</a>
-        <a th:href="@{/account}" class="btn btn-danger">Account</a>
+        <a class="btn btn-outline-light mr-2 " th:href="@{/upload}" style="border-radius: 35px;">Upload meme</a>
+        <a th:href="@{/}" class="btn btn-danger ml-2"  style="border-radius: 35px;">Main page</a>
+        <a th:href="@{/account}" class="btn btn-danger"  style=" border-radius: 35px;">Account</a>
     </div>
 </nav>
 
@@ -81,13 +77,18 @@
                 </div>
                 <h3>Update account</h3>
                 <div class="col-12 form-input ">
-                    <form th:action="@{/proceedEdit}" th:object="${account}" method="post">
+                    <form th:action="@{/proceedEdit}" th:object="${account}" enctype="multipart/form-data" method="post">
                         <br>
                         <div class="form-group">
-                            <input type="text"  th:field="*{name}" class="form-control" placeholder="Name">
+                            <input type="file"  name="fileAccount"/>
                         </div>
                         <div class="form-group">
-                            <input type="text"  th:field="*{email}" class="form-control" placeholder="E-mail">
+                            <input type="text"  th:field="*{name}" class="form-control" style=" border-radius: 15px;
+font-size: 20px;"placeholder="Name">
+                        </div>
+                        <div class="form-group">
+                            <input type="text"  th:field="*{email}" class="form-control" style=" border-radius: 15px;
+font-size: 20px;" placeholder="E-mail">
                         </div>
                         <hr>
                         <div class="form-group text-center">
@@ -100,7 +101,3 @@
     </div>
 </div>
 
-
-
-</body>
-</html>

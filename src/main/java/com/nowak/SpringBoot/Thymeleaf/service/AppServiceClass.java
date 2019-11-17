@@ -38,6 +38,9 @@ public class AppServiceClass implements AppService {
     @Autowired
     private BCryptPasswordEncoder encoder;
 
+    @Autowired
+    private ReportedCommentRepo reportedCommentRepo;
+
     @Override
     @Transactional
     public Account findByName(String userName) {
@@ -49,6 +52,16 @@ public class AppServiceClass implements AppService {
     public void save(Account account) {
         System.out.println("saving account...");
         accountRepo.save(account);
+    }
+
+    @Override
+    public Account findAccountById(int id) {
+        Optional<Account> accountOptional = accountRepo.findById(id);
+        Account account = null;
+        if (accountOptional.isPresent()) {
+            account = accountOptional.get();
+        }
+        return account;
     }
 
     @Override
@@ -75,6 +88,11 @@ public class AppServiceClass implements AppService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Account account = findByName(authentication.getName());
         return account;
+    }
+
+    @Override
+    public List<Account> findAllAccounts() {
+        return accountRepo.findAll();
     }
 
 
@@ -108,10 +126,10 @@ public class AppServiceClass implements AppService {
 
     @Override
     public File findById(int id) {
-        Optional<File> f= fileRepo.findById(id);
-        File file=null;
-        if(f.isPresent()){
-            file=f.get();
+        Optional<File> f = fileRepo.findById(id);
+        File file = null;
+        if (f.isPresent()) {
+            file = f.get();
         }
         return file;
     }
@@ -134,14 +152,39 @@ public class AppServiceClass implements AppService {
 
     @Override
     public List<Comments> commentsFromFile(List<File> files) {
-        // map (fileId, commentId);
-        Map<File,Comments> map = new HashMap<File, Comments>();
+        Map<File, Comments> map = new HashMap<File, Comments>();
         return null;
     }
 
     @Override
     public void save(Reported reported) {
         reportedRepo.save(reported);
+    }
+
+    @Override
+    public List<Reported> findAllReported() {
+        return reportedRepo.findAll();
+    }
+
+    @Override
+    public List<File> findAllByUserNick(String nick) {
+        List<File> files = fileRepo.findAllByUserNick(nick);
+        return files;
+    }
+
+    @Override
+    public void saveReportedComment(ReportedComments reportedComment) {
+        reportedCommentRepo.save(reportedComment);
+    }
+
+    @Override
+    public Comments findCommentById(int id) {
+        Optional<Comments> comment = commentRepo.findById(id);
+        Comments cmt = null;
+        if (comment.isPresent()) {
+            cmt = comment.get();
+        }
+        return cmt;
     }
 
     private Collection<SimpleGrantedAuthority> mapToAuthorities(Collection<Authority> authorities) {

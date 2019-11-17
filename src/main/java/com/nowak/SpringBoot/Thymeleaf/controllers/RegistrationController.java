@@ -57,6 +57,7 @@ public class RegistrationController {
         }
         if (!bindingResult.hasErrors()) {
             Account account = appService.convertToAccount(accountModel);
+            account.setPhoto("https://dizzys3.s3.eu-central-1.amazonaws.com/unknow.png");
             account.setConfirmToken(UUID.randomUUID().toString());
 
             appService.save(account);

@@ -8,6 +8,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
 import com.nowak.SpringBoot.Thymeleaf.entities.Account;
 import com.nowak.SpringBoot.Thymeleaf.entities.File;
+import com.nowak.SpringBoot.Thymeleaf.models.AccountModel;
 import com.nowak.SpringBoot.Thymeleaf.models.MemeModel;
 import com.nowak.SpringBoot.Thymeleaf.service.AppService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -46,6 +45,7 @@ public class S3Controller {
 
     BasicAWSCredentials credentials;
     AmazonS3 amazonS3;
+    ObjectMetadata objectMetadata;
 
     @PostConstruct
     public void initClient() {
@@ -55,6 +55,9 @@ public class S3Controller {
                 .withRegion("eu-central-1")
                 .withCredentials(new AWSStaticCredentialsProvider(credentials))
                 .build();
+
+        objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentType("image/jpeg");
     }
 
     @PostMapping("/upload")
@@ -74,9 +77,6 @@ public class S3Controller {
 
         try {
             InputStream inputStream = file.getInputStream();
-            ObjectMetadata objectMetadata = new ObjectMetadata();
-            objectMetadata.setContentType("image/jpeg");
-
             amazonS3.putObject(new PutObjectRequest(bucketName,
                     file.getOriginalFilename(), inputStream, objectMetadata)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
@@ -91,8 +91,8 @@ public class S3Controller {
             Account account = appService.getLoggedAccount();
             String accName = account.getName();
             Date date = new Date();
-            String str =DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(date);
-            File appFile = new File(accName,path,memeModel.getTitle(),0,0, date);
+            String str = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(date);
+            File appFile = new File(accName, path, memeModel.getTitle(), 0, 0, date);
             appService.saveFile(appFile);
 
         } catch (IOException e) {
@@ -100,4 +100,49 @@ public class S3Controller {
         }
         return "upload-meme";
     }
+
+    @RequestMapping(value = "/proceedEdit", method = RequestMethod.POST)
+    public String proceedEditAccount(@RequestParam("fileAccount") MultipartFile file,
+                                     HttpServletRequest httpServletRequest,
+                                     @Valid @ModelAttribute("account") AccountModel accountModel, BindingResult bindingResult, Model model) {
+        Account existUser = appService.findByName(accountModel.getName());
+//        if (existUser != null) {
+//            model.addAttribute("edit_error", "This username is taken. Please choose another one");
+//            return "account-edit";
+//        }
+//        Account existEmail = appService.findByEmail(accountModel.getEmail());
+//        if (existEmail != null) {
+//            model.addAttribute("edit_error", "Account with that e-mail already exists. Please choose another one");
+//            return "account-edit";
+//        }
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("edit_error", bindingResult.getFieldError().getDefaultMessage());
+            return "account-edit";
+        } else {
+            try {
+                InputStream inputStream = file.getInputStream();
+                amazonS3.putObject(new PutObjectRequest(bucketName,
+                        file.getOriginalFilename(), inputStream, objectMetadata)
+                        .withCannedAcl(CannedAccessControlList.PublicRead));
+
+                S3Object photo = amazonS3.getObject(new GetObjectRequest(bucketName,file.getOriginalFilename()));
+                String photoPath = photo.getObjectContent().getHttpRequest().getURI().toString();
+                httpServletRequest.setAttribute("file", photoPath);
+                String name = accountModel.getName();
+                String email = accountModel.getEmail();
+                Account account = appService.getLoggedAccount();
+                account.setPhoto(photoPath);
+                account.setName(name);
+                account.setEmail(email);
+                appService.save(account);
+
+                model.addAttribute("edit_success", "Account updated");
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+        return"account-edit";
+}
 }

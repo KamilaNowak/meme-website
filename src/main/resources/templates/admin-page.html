@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://user.fontawesome.com/releases/v5.0.8/css/solid.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+        .image-bg {
+            background-image: url('https://i.imgur.com/Xc46GEN.png');
+            height: 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+
+            min-width: 100%;
+            min-height: 100%;
+        }
+
+        .card-horizontal {
+            display: flex;
+            flex: 1 1 auto;
+        }
+
+        .main-section {
+            margin: 0 auto;
+            margin-top: 50px;
+        }
+
+        .modal-content {
+            opacity: .9;
+            padding: 0 10px;
+            border-radius: 18px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group input {
+            border-radius: 15px;
+            font-size: 20px;
+        }
+
+        .form-group button {
+            border-radius: 15px;
+        }
+
+
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <a class="navbar-brand" th:href="@{/}">
+        <img src="https://i.imgur.com/t9gh16j.png" alt="logo" style="width:110px; ">
+    </a>
+    <div class="pull-right ml-auto" style="width:100%;">
+        <a class="btn btn-outline-light mr-2 "  style="   border-radius: 35px;"th:href="@{/upload}">Upload meme</a>
+        <a th:href="@{/}" class="btn btn-danger ml-" style="   border-radius: 35px;">Main page</a>
+    </div>
+</nav>
+
+<div class="image-bg">
+    <div class=" modal-dialog modal-xl">
+        <div class="main-section">
+            <div class="modal-content ">
+                <br>
+
+                <ul class="nav nav-pills" style="margin-left:12px" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="pill" href="#reportedPosts">Reported posts</a>
+
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " data-toggle="pill" href="#reportedComments">Reported comments</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " data-toggle="pill" href="#manageUsers">Manage users</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " data-toggle="pill" href="#managePosts">Manage posts</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content mt-3 ml-3 mr-3 mb-3">
+                    <div id="reportedPosts" class="tab-pane fade in active">
+                        <table clss="table table-light" style="width:100%">
+                            <tbody th:each="temp : ${reportedFiles}">
+                            <td>
+
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="col-12 mt-2">
+                                            <div class="card">
+                                                <div class="card-horizontal">
+                                                    <div class="img-square-wrapper " style="margin: 0 auto;">
+                                                        <img class="" th:src="${temp.filePath}" alt="Card image cap"
+                                                             style="height: 210px">
+
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <h5 class="card-title"><span th:text="${temp.fileTitle}"/></h5>
+                                                        <p class="card-text">
+                                                        <small>Added by user:</small><span class="badge badge-secondary"><span
+                                                            th:text="${temp.addingUser}"/></span><br>
+                                                        <small>Reported by user:</small><span class="badge badge-secondary"> <span
+                                                                th:text="${temp.reportingUser}"/></span><br>
+                              <p> <a class="btn btn-outline-danger" href="#" style="border-radius:  45px;">Delete <i class="fa fa-trash-o"></i></a>
+                                                        <a class="btn btn-outline-dark" href="#" style="border-radius: 45px;">Ban <i class="fa fa-lock"></i></a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</td>
+</tbody>
+</table>
+</div>
+
+<div id="reportedComments" class="tab-pane fhttps://i.imgur.com/OdQBLei.pngade in active">
+    comms
+</div>
+
+<div id="manageUsers" class="tab-pane fade in active">
+    users
+</div>
+
+<div id="managePosts" class="tab-pane fade in active">
+    posts
+</div>
+</div>
+<br>
+</div>
+</div>
+</div>
+
+</div>
+</body>

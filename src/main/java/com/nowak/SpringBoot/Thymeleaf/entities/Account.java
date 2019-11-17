@@ -1,6 +1,7 @@
 package com.nowak.SpringBoot.Thymeleaf.entities;
 
 import org.hibernate.annotations.Columns;
+import org.springframework.stereotype.Controller;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -23,6 +24,9 @@ public class Account {
 
     @Column(name="email")
     private String email;
+
+    @Column(name="photo")
+    private String photo;
 
     @Column(name = "confirm_token")
     private String confirmToken;
@@ -77,5 +81,13 @@ public class Account {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 }

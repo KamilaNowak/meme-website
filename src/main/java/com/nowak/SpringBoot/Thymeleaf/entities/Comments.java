@@ -21,11 +21,13 @@ public class Comments {
     @Column(name="comment")
     private String comment;
 
+    private String photo;
+
     @Column(name="date", columnDefinition = "DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
-    public Comments() { ;
+    public Comments() {
     }
 
     public Comments(String userNick, int fileID, String comment, Date date) {
@@ -33,6 +35,22 @@ public class Comments {
         this.fileID = fileID;
         this.comment = comment;
         this.date = date;
+    }
+
+    public Comments(String userNick, int fileID, String comment, Date date,String photo) {
+        this.userNick = userNick;
+        this.fileID = fileID;
+        this.comment = comment;
+        this.photo = photo;
+        this.date = date;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
     public String getUserNick() {

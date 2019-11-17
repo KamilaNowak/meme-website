@@ -10,16 +10,13 @@ import java.util.List;
 @Repository
 public interface FileRepo extends JpaRepository<File, Integer> {
 
-
-
     File findByTitle(String title);
 
     void deleteFileByTitle(String title);
 
     void deleteFileById(int id);
 
-
     List<File> findAll();
 
-
+    List<File> findAllByUserNick(String nick);
 }

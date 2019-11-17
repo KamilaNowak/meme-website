@@ -38,6 +38,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/dislike/**").hasRole("USER")
                 .antMatchers("/comment/**").hasRole("USER")
                 .antMatchers("/report/**").hasRole("USER")
+         //       .antMatchers("/root/**").hasRole("MODERATOR")
                 .and()
                 .formLogin()
                     .loginPage("/login")
@@ -47,7 +48,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .permitAll()
                 .and()
                     .logout()
-                    .permitAll();
+                    .permitAll()
+                .and()
+                .exceptionHandling()
+                .accessDeniedPage("/error");
     }
 
     @Bean

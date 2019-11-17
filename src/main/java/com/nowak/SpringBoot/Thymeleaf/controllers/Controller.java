@@ -28,10 +28,21 @@ public class Controller {
     public String showMain(Model model) {
         List<File> files = appService.findAll();
         List<Comments> comments = appService.findAllComments();
+        for (Comments i : comments) {
+            String nick = i.getUserNick();
+            String photo = appService.findByName(nick).getPhoto();
+            System.out.println(photo);
+            i.setPhoto(photo);
+        }
         model.addAttribute("files", files);
         model.addAttribute("cmtModel", new CommentModel());
         model.addAttribute("comments", comments);
         return "main-page";
+    }
+
+    @GetMapping("/error")
+    public String showErrorPage() {
+        return "error-page";
     }
 
     @GetMapping("/add-meme")
@@ -42,7 +53,9 @@ public class Controller {
 
     @GetMapping("/account")
     public String showAccountPage(Model model) {
+        List<File> userFiles = appService.findAllByUserNick(appService.getLoggedAccount().getName());
         model.addAttribute("account", appService.getLoggedAccount());
+        model.addAttribute("userFiles", userFiles);
         return "account-page";
     }
 
@@ -52,45 +65,5 @@ public class Controller {
         return "account-edit";
     }
 
-    @RequestMapping(value = "/proceedEdit", method = RequestMethod.POST)
-    public String proceedEditAccount(@Valid @ModelAttribute("account") AccountModel accountModel, BindingResult bindingResult, Model model) {
-        Account existUser = appService.findByName(accountModel.getName());
-        if (existUser != null) {
-            model.addAttribute("edit_error", "This username is taken. Please choose another one");
-            return "account-edit";
-        }
-        Account existEmail = appService.findByEmail(accountModel.getEmail());
-        if (existEmail != null) {
-            model.addAttribute("edit_error", "Account with that e-mail already exists. Please choose another one");
-            return "account-edit";
-        }
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("edit_error", bindingResult.getFieldError().getDefaultMessage());
-            return "account-edit";
-        } else {
-//            if (accountModel.getName() != null) {
-//                String name = accountModel.getName();
-//                Account account = appService.getLoggedAccount();
-//                account.setName(name);
-//                appService.save(account);
-//            }
-//            if(accountModel.getEmail()!=null){
-//                String email = accountModel.getEmail();
-//                Account account=appService.getLoggedAccount();
-//                account.setEmail(email);
-//                appService.save(account);
-//            }
-//            if(accountModel.getName()!=null && accountModel.getEmail()!=null){
-            String name = accountModel.getName();
-            String email = accountModel.getEmail();
-            Account account = appService.getLoggedAccount();
-            account.setName(name);
-            account.setEmail(email);
-            appService.save(account);
-            // }
-            model.addAttribute("edit_success", "Account updated");
-        }
-        return "account-edit";
-    }
 
 }

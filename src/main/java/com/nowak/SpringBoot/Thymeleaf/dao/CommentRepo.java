@@ -10,4 +10,5 @@ import java.util.List;
 public interface CommentRepo extends JpaRepository<Comments,Integer> {
 
     List<Comments> findAllByFileID(int id);
+
 }

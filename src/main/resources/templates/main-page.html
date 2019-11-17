@@ -14,91 +14,115 @@
         .card-footer a {
             border-radius: 35px;
         }
+
+        .image-bg {
+            background-image: url('http://wallpoper.com/images/00/28/03/98/outer-space_00280398.png');
+            height: 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            position: fixed;
+            min-width: 100%;
+            min-height: 100%;
+        }
     </style>
+
+    <script>
+        $(document).ready(function(){
+            $("#myBtn").click(function(){
+                $('.toast').toast('show');
+            });
+        });
+    </script>
 </head>
 <body>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <a class="navbar-brand" th:href="@{/}">
+            <img src="https://i.imgur.com/t9gh16j.png" alt="logo" style="width:110px;">
+        </a>
+        <div class="pull-right ml-auto" style="width:100%;">
+            <a th:href="@{/add-meme}" class="btn btn-outline-light mr-2"  style="   border-radius: 35px;">Upload meme </a>
+            <a th:href="@{/login}" class="btn btn-danger ml-"  style="   border-radius: 35px;">Log in</a>
+            <a th:href="@{/account}" class="btn btn-danger"  style="   border-radius: 35px;">Account</a>
+        </div>
+    </nav>
+    <div class="container mt-3">
 
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-    <a class="navbar-brand" th:href="@{/}">
-        <img src="https://i.imgur.com/t9gh16j.png" alt="logo" style="width:110px;">
-    </a>
-    <div class="pull-right ml-auto" style="width:100%;">
-        <a th:href="@{/add-meme}" class="btn btn-outline-light mr-2">Upload meme </a>
-        <a th:href="@{/login}" class="btn btn-danger ml-">Log in</a>
-        <a th:href="@{/account}" class="btn btn-danger">Account</a>
-    </div>
-    </div>
-    </div>
-</nav>
-<div class="container mt-3">
+        <table class="table table-light">
+            <tbody>
+            <tr th:each="temp : ${files}">
 
-    <table div class="table table-light">
-        <thead>
-        <tr>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="temp : ${files}">
-
-            <td>
-                <div class="container col-sm-8 mt-2">
-                    <div class="card card border-dark mb-2">
-                        <div class="card-header">
-                            <h5 class="card-title"><span th:text="${temp.title}"/></h5>
-                            <p class="card-text">Added by <span th:text="${temp.userNick}"/></p>
-                            <p class="card-text"><small class="text-muted">Last updated <span th:text="${temp.data}"/></small></p>
-                        </div>
-                        <div class="card-body">
-                            <img class="card-img-top" th:src="${temp.path}" alt="" style="size:auto;">
-                        </div>
-                        <div class="card-footer" style="">
-                            <a class="btn btn-primary" style="color:white" th:href="@{'/like/' + ${temp.id}}">Like  <i class="fa fa-thumbs-o-up"></i> <span class="badge badge-light">
+                <td>
+                    <div class="container col-sm-8 mt-2">
+                        <div class="card card border-dark mb-2">
+                            <div class="card-header">
+                                <h5 class="card-title"><span th:text="${temp.title}"/></h5>
+                                <p class="card-text">Added by <span th:text="${temp.userNick}"/></p>
+                                <p class="card-text"><small class="text-muted">Last updated <span
+                                        th:text="${temp.data}"/></small></p>
+                            </div>
+                            <div class="card-body">
+                                <img class="card-img-top" th:src="${temp.path}" alt="" style="size:auto;">
+                            </div>
+                            <div class="card-footer" style="">
+                                <a class="btn btn-primary" style="color:white" th:href="@{'/like/' + ${temp.id}}">Like
+                                    <i class="fa fa-thumbs-o-up"></i> <span class="badge badge-light">
                                 <span th:text="${temp.likes}"/></span></a>
-                            <a class="btn btn-danger" th:href="@{'/dislike/' + ${temp.id}}" style="color:white">Dislike  <i class="fa fa-thumbs-o-down"></i> <span class="badge badge-light">
+                                <a class="btn btn-danger" th:href="@{'/dislike/' + ${temp.id}}" style="color:white">Dislike
+                                    <i class="fa fa-thumbs-o-down"></i> <span class="badge badge-light">
                                 <span th:text="${temp.dislikes}"/></span></a>
-                            <a class="btn btn-warning" style="color:white" >Save to cubby <i class="fa fa-folder-o"></i> </a>
-                            <a class="btn btn-success"style="color:white" th:href="${temp.path}">Download <i class="fa fa-download"></i> </a>
-                            <a class="btn btn-dark" style="color:white" th:href="@{'/report/' + ${temp.id}}"
-                               onclick="if (!(confirm('Are you sure you want to report this meme to administrator?'))) return false"> Report <i class="fa fa-flag"></i></a>
+                                <a class="btn btn-warning" style="color:white">Save to cubby <i
+                                        class="fa fa-folder-o"></i> </a>
+                                <a class="btn btn-success" style="color:white" th:href="${temp.path}">Download <i
+                                        class="fa fa-download"></i> </a>
+                                <a class="btn btn-dark" style="color:white" th:href="@{'/report/' + ${temp.id}}"
+                                   onclick="if (!(confirm('Are you sure you want to report this meme to administrator?'))) return false">
+                                    Report <i class="fa fa-flag"></i></a>
 
-                        </div>
-                        <div class="card-footer">
-                            <table class="table table-light">
-                                <tbody id="fileComments">
-                                <tr th:each="cmt: ${comments}">
-                                    <td>
-                                        <span class="badge badge-secondary"><span th:text="${cmt.userNick}"/></span>
-                                    </td>
+                            </div>
+                            <div class="card-footer">
+                                <table class="table table-light">
+                                    <tbody id="fileComments">
+                                    <tr th:each="cmt: ${comments}">
+                                        <td>
+                                            <img th:src="${cmt.photo}"  alt="" style="border-radius:450px; width:25px; height:25px;"/>
+                                        </td>
+                                        <td>
+                                            <span class="badge badge-secondary"><span th:text="${cmt.userNick}"/></span>
+                                        </td>
 
-                                    <td>
-                                        <span th:text="${cmt.comment}"/>
-                                    </td>
+                                        <td>
+                                            <span th:text="${cmt.comment}"/>
+                                        </td>
 
-                                    <td>
-                                        <span th:text="${cmt.date}"/>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                            <form th:action="@{/comment}" th:object="${cmtModel}" style="size:auto" method="post">
-                                <input type="hidden" th:value="${temp.id}" name="fileID" />
-                                <div class="input-group">
-                                    <input type="text" class="form-control" th:field="*{comment}" placeholder=" Add comment"/>
-                                    <button type="submit" class="button btn-success"   style=" border-top-right-radius:20px; border-bottom-right-radius:20px;"> Add   </button>
-                                </div>
-                            </form>
+                                        <td>
+                                            <span th:text="${cmt.date}"/>
+                                        </td>
+
+                                        <td>
+                                            <a th:href="@{'/report-comment/' + ${cmt.id}}">Report</a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <form th:action="@{/comment}" th:object="${cmtModel}" style="size:auto" method="post">
+                                    <input type="hidden" th:value="${temp.id}" name="fileID"/>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" th:field="*{comment}"
+                                               placeholder=" Add comment"/>
+                                        <button type="submit" class="button btn-success"
+                                                style=" border-top-right-radius:20px; border-bottom-right-radius:20px;">
+                                            Add
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
-
-<script>
-
-</script>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
