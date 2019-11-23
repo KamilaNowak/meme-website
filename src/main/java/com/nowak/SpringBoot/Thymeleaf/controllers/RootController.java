@@ -44,10 +44,13 @@ public class RootController {
 
         for (ReportedComments r : allReportedComments) {
             int id = r.getId(); //comment ID
-            String user = appService.findCommentById(id).getUserNick();
-            Comments comment = appService.findCommentById(id);
+            int commentId=r.getCommentID();
+           // String user = appService.findReportedCommentById(id).getUserNick();
+            String user= appService.findCommentById(commentId).getUserNick();
+            Comments comment = appService.findCommentById(commentId);
             int fileId = comment.getFileID();
             String text = comment.getComment();
+            System.out.println(id+" "+commentId+ " "+ user+" "+ comment);
             String photoPath = appService.findByName(user).getPhoto();
             Date date = comment.getDate();
             ReportedComments rc = new ReportedComments(r.getId(),r.getCommentID(),r.getReportingUser(), user, fileId, text, photoPath, date);

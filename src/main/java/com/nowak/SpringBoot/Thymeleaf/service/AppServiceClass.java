@@ -55,6 +55,12 @@ public class AppServiceClass implements AppService {
     @Autowired
     private CubbyRepo cubbyRepo;
 
+    @Autowired
+    private UserFileLikesRepo userFileLikesRepo;
+
+    @Autowired
+    private UserFileDislikesRepo userFileDislikesRepo;
+
 
     @Value("${cloud.aws.credentials.accessKey}")
     private String s3AccessKey;
@@ -250,7 +256,7 @@ public class AppServiceClass implements AppService {
     @Override
     public void deleteCommentAndReportedComment(int id) {
         ReportedComments rc = reportedCommentRepo.findById(id);
-        System.out.println(rc.getComment()+" "+rc.getReportingUser());
+        System.out.println(rc.getComment() + " " + rc.getReportingUser());
         System.out.println(rc.getCommentID());
         int commentId = rc.getCommentID();
         System.out.println(commentId);
@@ -356,6 +362,11 @@ public class AppServiceClass implements AppService {
     }
 
     @Override
+    public ReportedComments findReportedCommentById(int id) {
+        return reportedCommentRepo.findById(id);
+    }
+
+    @Override
     public void saveCubby(Cubby cubby) {
         cubbyRepo.save(cubby);
     }
@@ -382,6 +393,36 @@ public class AppServiceClass implements AppService {
     @Override
     public void deleteCubby(Cubby cubby) {
         cubbyRepo.delete(cubby);
+    }
+
+    @Override
+    public void saveUserFileLike(UserFileLikes userFileLike) {
+        userFileLikesRepo.save(userFileLike);
+    }
+
+    @Override
+    public void saveUserFileDislike(UserFileDislikes userFileDislike) {
+        userFileDislikesRepo.save(userFileDislike);
+    }
+
+    @Override
+    public UserFileDislikes findUserFileDislikeByFileId(int id) {
+        return userFileDislikesRepo.findByFileId(id);
+    }
+
+    @Override
+    public void deleteUserFileDislike(UserFileDislikes userFileDislike) {
+        userFileDislikesRepo.delete(userFileDislike);
+    }
+
+    @Override
+    public UserFileLikes findUserFileLikeByFileId(int id) {
+        return userFileLikesRepo.findByFileId(id);
+    }
+
+    @Override
+    public void deleteUserFileLike(UserFileLikes userFileLike) {
+        userFileLikesRepo.delete(userFileLike);
     }
 
 

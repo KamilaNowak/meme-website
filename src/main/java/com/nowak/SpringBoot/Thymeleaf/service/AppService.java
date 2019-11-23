@@ -80,6 +80,8 @@ public interface AppService extends UserDetailsService {
 
     List<ReportedComments> findAllReportedComments();
 
+    ReportedComments findReportedCommentById(int id);
+
     void saveCubby(Cubby cubby);
 
     List<Cubby> findAllByEmail(String email);
@@ -89,5 +91,18 @@ public interface AppService extends UserDetailsService {
     Cubby findCubbyById(int id);
 
     void deleteCubby(Cubby cubby);
+
+    void saveUserFileLike(UserFileLikes userFileLike);
+
+    void saveUserFileDislike(UserFileDislikes userFileDislike);
+
+    UserFileDislikes findUserFileDislikeByFileId(int id);
+
+    void deleteUserFileDislike(UserFileDislikes userFileDislike);
+
+    UserFileLikes findUserFileLikeByFileId(int id);
+
+    void deleteUserFileLike(UserFileLikes userFileLike);
+
 
 }
