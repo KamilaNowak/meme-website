@@ -28,7 +28,9 @@ public class Reported {
     public Reported() {
     }
 
-    public Reported(String reportingUser, Date addedDate, String filePath, String addingUser,String fileTitle) {
+    public Reported(int id, int fileID,String reportingUser, Date addedDate, String filePath, String addingUser,String fileTitle) {
+        this.id=id;
+        this.fileID=fileID;
         this.reportingUser = reportingUser;
         this.addedDate = addedDate;
         this.filePath = filePath;

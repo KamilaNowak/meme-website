@@ -14,7 +14,7 @@ public interface FileRepo extends JpaRepository<File, Integer> {
 
     void deleteFileByTitle(String title);
 
-    void deleteFileById(int id);
+    //void deleteFileById(int id);
 
     List<File> findAll();
 

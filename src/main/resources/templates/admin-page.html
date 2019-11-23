@@ -19,13 +19,13 @@
     <style>
         .image-bg {
             background-image: url('https://i.imgur.com/Xc46GEN.png');
-            height: 100%;
-            background-position: center;
+            background-attachment:local;
+            width:100%;
+            height:100%;
+            max-width: none;
+            position: absolute;
             background-repeat: no-repeat;
             background-size: cover;
-
-            min-width: 100%;
-            min-height: 100%;
         }
 
         .card-horizontal {
@@ -39,7 +39,6 @@
         }
 
         .modal-content {
-            opacity: .9;
             padding: 0 10px;
             border-radius: 18px;
         }
@@ -66,7 +65,7 @@
         <img src="https://i.imgur.com/t9gh16j.png" alt="logo" style="width:110px; ">
     </a>
     <div class="pull-right ml-auto" style="width:100%;">
-        <a class="btn btn-outline-light mr-2 "  style="   border-radius: 35px;"th:href="@{/upload}">Upload meme</a>
+        <a class="btn btn-outline-light mr-2 " style="   border-radius: 35px;" th:href="@{/upload}">Upload meme</a>
         <a th:href="@{/}" class="btn btn-danger ml-" style="   border-radius: 35px;">Main page</a>
     </div>
 </nav>
@@ -79,8 +78,7 @@
 
                 <ul class="nav nav-pills" style="margin-left:12px" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" data-toggle="pill" href="#reportedPosts">Reported posts</a>
-
+                        <a class="nav-link " data-toggle="pill" href="#reportedPosts">Reported posts</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link " data-toggle="pill" href="#reportedComments">Reported comments</a>
@@ -95,14 +93,14 @@
 
                 <div class="tab-content mt-3 ml-3 mr-3 mb-3">
                     <div id="reportedPosts" class="tab-pane fade in active">
-                        <table clss="table table-light" style="width:100%">
+                        <table class="table table-light" style="width:100%">
                             <tbody th:each="temp : ${reportedFiles}">
                             <td>
 
                                 <div class="container-fluid">
                                     <div class="row">
                                         <div class="col-12 mt-2">
-                                            <div class="card">
+                                            <div class="card" style="border-radius: 25px;">
                                                 <div class="card-horizontal">
                                                     <div class="img-square-wrapper " style="margin: 0 auto;">
                                                         <img class="" th:src="${temp.filePath}" alt="Card image cap"
@@ -112,39 +110,112 @@
                                                     <div class="card-body">
                                                         <h5 class="card-title"><span th:text="${temp.fileTitle}"/></h5>
                                                         <p class="card-text">
-                                                        <small>Added by user:</small><span class="badge badge-secondary"><span
-                                                            th:text="${temp.addingUser}"/></span><br>
-                                                        <small>Reported by user:</small><span class="badge badge-secondary"> <span
+                                                            <small>Added by user </small><span
+                                                                class="badge badge-secondary"><span
+                                                                th:text="${temp.addingUser}"/></span><br>
+                                                            <small>Reported by user </small><span
+                                                                class="badge badge-secondary"> <span
                                                                 th:text="${temp.reportingUser}"/></span><br>
-                              <p> <a class="btn btn-outline-danger" href="#" style="border-radius:  45px;">Delete <i class="fa fa-trash-o"></i></a>
-                                                        <a class="btn btn-outline-dark" href="#" style="border-radius: 45px;">Ban <i class="fa fa-lock"></i></a></p>
+                                                            <a class="btn btn-outline-danger" th:href="@{'/admin/delete/' + ${temp.id}}"
+                                                               style="border-radius: 45px;color:black">Delete <i
+                                                                    class="fa fa-trash-o"></i></a>
+                                                            <a class="btn btn-outline-dark" href="#"
+                                                               style="border-radius: 45px;">Ban <i
+                                                                    class="fa fa-lock"></i></a>
+                                                            <a class="btn btn-outline-info" href="#"
+                                                               style="border-radius: 45px;color:black">Mute <i
+                                                                    class="fa fa-user-times"></i></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="reportedComments" class="tab-pane fade in active">
+                        <table class="table table-light" style="width:100%">
+                            <tbody th:each="rc : ${reportedCommentsList}">
+                            <td>
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="col-12 mt-2">
+                                            <div class="media border p-3" style="border-radius: 25px;">
+                                                <img th:src="${rc.photo}" alt="" class="mr-3 mt-3 "
+                                                     style="width:80px;height:80px;border-radius: 450px;">
+                                                <div class="media-body">
+                                                    <h4><span th:text="${rc.userNick}"/><small><i> Posted <span
+                                                            th:text="${rc.date}"/></i></small></h4>
+                                                    <p>Reported by <span th:text="${rc.reportingUser}"/> in post #<span
+                                                            th:text="${rc.fileID}"/></p>
+                                                    <div class="alert alert-secondary" style="border-radius: 45px;">
+                                                        <span th:text="${rc.comment}"/>
+                                                    </div>
+                                                    <a class="btn btn-outline-danger" th:href="@{'/admin/comment/delete/' + ${rc.id}}"
+                                                       style="border-radius: 45px;color:black">Delete <i
+                                                            class="fa fa-trash-o"></i></a>
+                                                    <a class="btn btn-outline-dark" href="#"
+                                                       style="border-radius: 45px;">Ban <i class="fa fa-lock"></i></a>
+                                                    <a class="btn btn-outline-info" href="#"
+                                                       style="border-radius: 45px;color:black">Mute <i
+                                                            class="fa fa-user-times"></i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+
+                            </tbody>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="manageUsers" class="tab-pane fade in active">
+                        <table class="table table-light" style="width:100%">
+                            <tbody th:each="acc : ${accounts}">
+                            <td>
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="col-12 mt-2">
+                                            <div class="alert alert-secondary"  style="border-radius: 65px;">
+                                                <div class="media border p-3" style="border-radius: 25px;">
+
+                                                    <img th:src="${acc.photo}" alt="" class="mr-3 mt-3 "
+                                                         style="width:80px;height:80px;border-radius: 450px;">
+                                                    <div class="media-body">
+                                                        <h4><span th:text="${acc.name}"/><small><i> Account ID #<span
+                                                                th:text="${acc.id}"/></i></small></h4>
+                                                        <p>Email address <span th:text="${acc.email}"/>
+
+                                                </div>
+                                                    <br>
+                                                    <a class="btn btn-outline-danger"  href="#" style="border-radius: 45px;">Delete  <i class="fa fa-trash-o"></i></a>
+                                                    <a class="btn btn-outline-dark" href="#" style="border-radius: 45px;">Ban <i class="fa fa-lock"></i></a>
+                                                    <a class="btn btn-outline-info" href="#" style="border-radius: 45px;">Mute <i class="fa fa-lock"></i></a>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            </tbody>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="managePosts" class="tab-pane fade in active">
+                        posts
                     </div>
                 </div>
+                <br>
             </div>
         </div>
     </div>
-</div>
-</td>
-</tbody>
-</table>
-</div>
-
-<div id="reportedComments" class="tab-pane fhttps://i.imgur.com/OdQBLei.pngade in active">
-    comms
-</div>
-
-<div id="manageUsers" class="tab-pane fade in active">
-    users
-</div>
-
-<div id="managePosts" class="tab-pane fade in active">
-    posts
-</div>
-</div>
-<br>
-</div>
-</div>
-</div>
 
 </div>
 </body>

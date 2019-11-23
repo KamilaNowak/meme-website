@@ -2,6 +2,7 @@ package com.nowak.SpringBoot.Thymeleaf.controllers;
 
 import com.nowak.SpringBoot.Thymeleaf.entities.Account;
 import com.nowak.SpringBoot.Thymeleaf.entities.Comments;
+import com.nowak.SpringBoot.Thymeleaf.entities.Cubby;
 import com.nowak.SpringBoot.Thymeleaf.entities.File;
 import com.nowak.SpringBoot.Thymeleaf.models.AccountModel;
 import com.nowak.SpringBoot.Thymeleaf.models.CommentModel;
@@ -54,8 +55,25 @@ public class Controller {
     @GetMapping("/account")
     public String showAccountPage(Model model) {
         List<File> userFiles = appService.findAllByUserNick(appService.getLoggedAccount().getName());
+        List<Cubby> userCubbiesRare = appService.findAllByEmail(appService.getLoggedAccount().getEmail());
+        List<Cubby> userCubbies = new ArrayList<>();
+        for (Cubby c : userCubbiesRare) {
+            Cubby cubby = new Cubby();
+            cubby.setId(c.getId());
+            cubby.setEmail(c.getEmail());
+            cubby.setFileID(c.getFileID());
+        //    cubby.setPath(appService.findById(c.getFileID()).getPath());
+            File file = appService.findById(c.getFileID());
+           String path = file.getPath();
+            System.out.println("=====>>>>" +path);
+            cubby.setPath(path);
+            cubby.setUserNick(appService.findById(c.getFileID()).getUserNick());
+            System.out.println(cubby.getId()+ " "+cubby.getFileID());
+            userCubbies.add(cubby);
+        }
         model.addAttribute("account", appService.getLoggedAccount());
         model.addAttribute("userFiles", userFiles);
+        model.addAttribute("userCubbies", userCubbies);
         return "account-page";
     }
 

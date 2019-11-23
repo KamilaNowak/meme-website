@@ -87,4 +87,33 @@ public class FeatureController {
         emailService.sendEmail(informMessageAboutBan);
         return "redirect:/admin";
     }
+
+    @RequestMapping(value="/admin/comment/delete/{id}")
+    public String deleteComment(@PathVariable("id") int id){
+        appService.deleteCommentAndReportedComment(id);
+        return "redirect:/admin";
+    }
+    @RequestMapping(value = "/cubby/{id}")
+    public String saveToCubby(@PathVariable("id") int id){
+        String email = appService.getLoggedAccount().getEmail();
+        Cubby cubby = new Cubby(email,id);
+        appService.saveCubby(cubby);
+        return "redirect:/";
+    }
+
+    @RequestMapping(value="/unpin/{id}")
+    public String unpinFromCubby(@PathVariable("id") int id){
+        Cubby cubby= appService.findCubbyById(id);
+        appService.deleteCubby(cubby);
+        return "redirect:/account";
+    }
+    @RequestMapping(value="/account/file/delete/{id}")
+    public String deleteFile(@PathVariable("id") int id){
+        appService.deleteFileById(id);
+        return "redirect:/account";
+    }
+
+
+
+
 }

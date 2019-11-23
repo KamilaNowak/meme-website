@@ -17,25 +17,22 @@
 
         .image-bg {
             background-image: url('http://wallpoper.com/images/00/28/03/98/outer-space_00280398.png');
-            height: 100%;
-            background-position: center;
+            background-attachment:local;
+            width:100%;
+            height:100%;
+            max-width: none;
+            position: absolute;
             background-repeat: no-repeat;
             background-size: cover;
-            position: fixed;
-            min-width: 100%;
-            min-height: 100%;
         }
     </style>
 
     <script>
-        $(document).ready(function(){
-            $("#myBtn").click(function(){
-                $('.toast').toast('show');
-            });
-        });
+
     </script>
 </head>
 <body>
+<div class="image-bg">
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
         <a class="navbar-brand" th:href="@{/}">
             <img src="https://i.imgur.com/t9gh16j.png" alt="logo" style="width:110px;">
@@ -47,11 +44,9 @@
         </div>
     </nav>
     <div class="container mt-3">
-
-        <table class="table table-light">
+        <table class="table">
             <tbody>
             <tr th:each="temp : ${files}">
-
                 <td>
                     <div class="container col-sm-8 mt-2">
                         <div class="card card border-dark mb-2">
@@ -71,7 +66,7 @@
                                 <a class="btn btn-danger" th:href="@{'/dislike/' + ${temp.id}}" style="color:white">Dislike
                                     <i class="fa fa-thumbs-o-down"></i> <span class="badge badge-light">
                                 <span th:text="${temp.dislikes}"/></span></a>
-                                <a class="btn btn-warning" style="color:white">Save to cubby <i
+                                <a class="btn btn-warning" style="color:white" th:href="@{'/cubby/' + ${temp.id}}">Save to cubby <i
                                         class="fa fa-folder-o"></i> </a>
                                 <a class="btn btn-success" style="color:white" th:href="${temp.path}">Download <i
                                         class="fa fa-download"></i> </a>
@@ -83,7 +78,7 @@
                             <div class="card-footer">
                                 <table class="table table-light">
                                     <tbody id="fileComments">
-                                    <tr th:each="cmt: ${comments}">
+                                    <tr th:each="cmt: ${comments}" th:if="${cmt.fileID} == ${temp.id}">
                                         <td>
                                             <img th:src="${cmt.photo}"  alt="" style="border-radius:450px; width:25px; height:25px;"/>
                                         </td>
@@ -124,5 +119,6 @@
             </tbody>
         </table>
     </div>
+</div>
 </body>
 </html>

@@ -10,21 +10,21 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://user.fontawesome.com/releases/v5.0.8/css/solid.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://user.fontawesome.com/releases/v5.0.8/css/solid.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <style>
         .image-bg {
             background-image: url('https://wallpaperspot.net/images/2019/07/22/pepe-wallpaper-hd-2019-7.jpg');
-            height: 100%;
-            background-position: center;
+            background-attachment:local;
+            width:100%;
+            height:100%;
+            max-width: none;
+            position: absolute;
             background-repeat: no-repeat;
             background-size: cover;
-            position: fixed;
-            min-width: 100%;
-            min-height: 100%;
         }
 
         .main-section {
@@ -60,39 +60,40 @@
         <img src="https://i.imgur.com/t9gh16j.png" alt="logo" style="width:110px; ">
     </a>
     <div class="pull-right ml-auto" style="width:100%;">
-        <a class="btn btn-outline-light mr-2 " th:href="@{/upload}"  style="   border-radius: 35px;">Upload meme</a>
-        <a th:href="@{/}" class="btn btn-danger ml-"  style="   border-radius: 35px;">Main page</a>
+        <a class="btn btn-outline-light mr-2 " th:href="@{/upload}" style="   border-radius: 35px;">Upload meme</a>
+        <a th:href="@{/}" class="btn btn-danger ml-" style="   border-radius: 35px;">Main page</a>
     </div>
 </nav>
 
 <div class="image-bg">
     <div class="modal-dialog modal-lg">
         <div class="main-section">
-            <div class="modal-content text-center">
+            <div class="modal-content">
                 <br>
 
                 <ul class="nav nav-pills" style="margin-left:12px" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" data-toggle="pill" href="#details">Account Detail</a>
+                        <a class="nav-link" data-toggle="pill" href="#details">Account Detail</a>
 
                     </li>
                     <li class="nav-item">
                         <a class="nav-link " data-toggle="pill" href="#memes">My Memes</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " data-toggle="pill" href="#liked">Liked Memes</a>
+                        <a class="nav-link " data-toggle="pill" href="#liked">My Cubby</a>
                     </li>
                 </ul>
 
                 <div class="tab-content">
                     <div id="details" class="tab-pane fade in active">
-                        <div class="container" >
-                            <div class="row" >
+                        <div class="container">
+                            <div class="row">
                                 <div class="col-xs-3 text-center" style="width:100%">
                                     <div class="container mt-3">
                                         <div class="card text-center" style="width:100%; text-align:center">
                                             <img class="card-img-top mt-1 "
-                                                 th:src="${account.photo}" alt="Card image" style="margin: 0 auto;width:175px;height:175px;border-radius:450px">
+                                                 th:src="${account.photo}" alt="Card image"
+                                                 style="margin: 0 auto;width:175px;height:175px;border-radius:450px">
                                             <div class="card-body">
                                                 <h4 class="card-title">Profile photo</h4>
 
@@ -106,18 +107,22 @@
                                     <div class="container mt-3">
                                         <ul class="list-group" style="width:100%">
                                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                Name:  <span th:text="${account.name}"/>
-                                                <a class="btn btn-outline-warning" style="border-radius: 55px;" th:href="@{/account/edit}">Change</a>
+                                                Name: <span th:text="${account.name}"/>
+                                                <a class="btn btn-outline-warning" style="border-radius: 55px;"
+                                                   th:href="@{/account/edit}">Change</a>
                                             </li>
 
                                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                Password:  <span class="badge badge-danger badge-pill">NOT TO DISPLAY</span>
-                                                <a class="btn btn-outline-warning" style="border-radius: 55px;" th:href="@{/reset}">Change</a>
+                                                Password: <span
+                                                    class="badge badge-danger badge-pill">NOT TO DISPLAY</span>
+                                                <a class="btn btn-outline-warning" style="border-radius: 55px;"
+                                                   th:href="@{/reset}">Change</a>
                                             </li>
 
                                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                                 E-mail: <span th:text="${account.email}"/>
-                                                <a class="btn btn-outline-warning" style="border-radius: 55px;" th:href="@{/account/edit}">Change</a>
+                                                <a class="btn btn-outline-warning" style="border-radius: 55px;"
+                                                   th:href="@{/account/edit}">Change</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -126,11 +131,58 @@
                         </div>
                     </div>
                     <div id="memes" class="tab-pane fade in active">
-                        memes
+                        <div class="container mt-3">
+                            <table class="table table-light">
+                                <tbody>
+                                <tr th:each="meme : ${userFiles}">
+                                    <td>
+                                        <div class=" container col-sm-8 mt-2">
+                                            <div class="card card border-primary mb-2">
+                                                <div class="card-header">
+                                                    <h5 class="card-title"><span class="badge badge-secondary">#<span th:text="${meme.id}"/></span></h5>
+                                                    <p>Added <span th:text="${meme.data}"/></p>
+                                                </div>
+                                                <div class="card-body">
+                                                    <img class="card-img-top" th:src="${meme.path}" alt=""
+                                                         style="size:auto">
+                                                </div>
+                                                <div class="card-footer">
+                                                    <a class="btn btn-danger" style="color:white;border-radius: 45px" th:href="@{'/account/file/delete/' + ${meme.id}}">
+                                                        Delete <i class="fa fa-trash-o"></i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-
                     <div id="liked" class="tab-pane fade in active">
-                        liked
+                        <div class="container mt-3">
+                            <table class="table table-light">
+                                <tbody>
+                                <tr th:each="cubby : ${userCubbies}">
+                                    <td>
+                                        <div class="container col-sm-8 mt-2">
+                                            <div class="card card border-warning mb-2">
+                                                <div class="card-header">
+                                                    <h5 class="card-title"><span class="badge badge-secondary">#<span th:text="${cubby.fileID}"/></span></h5>
+                                                    <p>Added by <span th:text="${cubby.userNick}"/></p>
+                                                </div>
+                                                <div class="card-body">
+                                                    <img th:src="${cubby.path}" class="card-img-top" alt="" style="size:auto">
+                                                </div>
+                                                <div class="card-footer">
+                                                    <a class=" btn btn-warning" th:href="@{'/unpin/' + ${cubby.id}}" style="color:white;border-radius:45px">Unpin <i class="fa fa-folder-open"></i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 <br>

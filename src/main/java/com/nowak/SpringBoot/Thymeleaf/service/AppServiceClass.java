@@ -1,9 +1,18 @@
 package com.nowak.SpringBoot.Thymeleaf.service;
 
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.SdkClientException;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.nowak.SpringBoot.Thymeleaf.dao.*;
 import com.nowak.SpringBoot.Thymeleaf.entities.*;
 import com.nowak.SpringBoot.Thymeleaf.models.AccountModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,10 +23,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class AppServiceClass implements AppService {
 
     @Autowired
@@ -41,6 +52,50 @@ public class AppServiceClass implements AppService {
     @Autowired
     private ReportedCommentRepo reportedCommentRepo;
 
+    @Autowired
+    private CubbyRepo cubbyRepo;
+
+
+    @Value("${cloud.aws.credentials.accessKey}")
+    private String s3AccessKey;
+
+    @Value("${cloud.aws.credentials.secretKey}")
+    private String s3SecretKey;
+
+    @Value("${aws.bucket.name}")
+    private String bucketName;
+
+    BasicAWSCredentials credentials;
+    AmazonS3 amazonS3;
+    ObjectMetadata objectMetadata;
+
+    @PostConstruct
+    public void initClient() {
+        credentials = new BasicAWSCredentials(s3AccessKey, s3SecretKey);
+
+        amazonS3 = AmazonS3Client.builder()
+                .withRegion("eu-central-1")
+                .withCredentials(new AWSStaticCredentialsProvider(credentials))
+                .build();
+
+        objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentType("image/jpeg");
+    }
+
+    private Collection<SimpleGrantedAuthority> mapToAuthorities(Collection<Authority> authorities) {
+        System.out.println("converting roles...");
+        return authorities.stream().map(a -> new SimpleGrantedAuthority(a.getAuthority())).collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        Account account = accountRepo.findByName(s);
+        if (account == null)
+            throw new UsernameNotFoundException("Account not found");
+        return new User(account.getName(), account.getPassword(), mapToAuthorities(account.getAuthorities()));
+    }
+
     @Override
     @Transactional
     public Account findByName(String userName) {
@@ -50,8 +105,27 @@ public class AppServiceClass implements AppService {
     @Override
     @Transactional
     public void save(Account account) {
-        System.out.println("saving account...");
         accountRepo.save(account);
+    }
+
+    @Override
+    public List<Account> findAllAccountsByName(String name) {
+        return accountRepo.findAllByName(name);
+    }
+
+    @Override
+    public void deleteAccountById(int id) {
+        Account account = this.findAccountById(id);
+        List<Comments> accountComments = this.findAllCommentsByUserNick(account.getName());
+        List<File> accountFiles = this.findAllByUserNick(account.getName());
+        for (Comments c : accountComments) {
+            c.setPhoto("findAllCommentsByUserNick");
+            c.setUserNick("Account Blocked");
+        }
+        for (File f : accountFiles) {
+            f.setUserNick("Account Blocked");
+        }
+        accountRepo.deleteById(id);
     }
 
     @Override
@@ -110,14 +184,47 @@ public class AppServiceClass implements AppService {
     @Override
     public void deleteFileByTitle(String title) {
         File file = fileRepo.findByTitle(title);
-        fileRepo.deleteFileById(file.getId());
+        Reported reported = this.findReportedByFileID(file.getId());
+        fileRepo.delete(file);
+        reportedRepo.delete(reported);
+        String filePath = file.getPath();
+        try {
+            amazonS3.deleteObject(new DeleteObjectRequest(bucketName, filePath));
+        } catch (AmazonServiceException a) {
+            a.printStackTrace();
+        } catch (SdkClientException s) {
+            s.printStackTrace();
+        }
     }
 
     @Override
+    @Transactional
     public void deleteFileById(int id) {
-        fileRepo.deleteFileById(id);
+        cubbyRepo.deleteAllByFileID(id);
+        reportedRepo.deleteAllByFileID(id);
+        fileRepo.delete(this.findById(id));
     }
 
+    @Override
+    public void deleteFileByReportedId(int id) {
+        Reported reported = this.findReportedById(id);
+        int fileID = reported.getFileID();
+        File file = this.findById(fileID);
+        List<Cubby> cubbiesWithFile = this.findAllByFileId(fileID);
+        for (Cubby c : cubbiesWithFile) {
+            this.deleteCubby(c);
+        }
+        String filePath = file.getPath();
+        fileRepo.delete(file);
+        reportedRepo.delete(reported);
+        try {
+            amazonS3.deleteObject(new DeleteObjectRequest(bucketName, filePath));
+        } catch (AmazonServiceException a) {
+            a.printStackTrace();
+        } catch (SdkClientException s) {
+            s.printStackTrace();
+        }
+    }
 
     @Override
     public List<File> findAll() {
@@ -141,6 +248,17 @@ public class AppServiceClass implements AppService {
     }
 
     @Override
+    public void deleteCommentAndReportedComment(int id) {
+        ReportedComments rc = reportedCommentRepo.findById(id);
+        System.out.println(rc.getComment()+" "+rc.getReportingUser());
+        System.out.println(rc.getCommentID());
+        int commentId = rc.getCommentID();
+        System.out.println(commentId);
+        reportedCommentRepo.deleteById(id);
+        commentRepo.deleteById(commentId);
+    }
+
+    @Override
     public List<Comments> findAllByFileID(int id) {
         return commentRepo.findAllByFileID(id);
     }
@@ -157,6 +275,16 @@ public class AppServiceClass implements AppService {
     }
 
     @Override
+    public List<Comments> findAllCommentsByUserNick(String userNick) {
+        return commentRepo.findAllByUserNick(userNick);
+    }
+
+    @Override
+    public void deleteCommentById(int id) {
+        commentRepo.deleteById(id);
+    }
+
+    @Override
     public void save(Reported reported) {
         reportedRepo.save(reported);
     }
@@ -164,6 +292,26 @@ public class AppServiceClass implements AppService {
     @Override
     public List<Reported> findAllReported() {
         return reportedRepo.findAll();
+    }
+
+    @Override
+    public Reported findReportedByFileID(int id) {
+        return reportedRepo.findByFileID(id);
+    }
+
+    @Override
+    public Reported findReportedById(int id) {
+        Optional<Reported> reported = reportedRepo.findById(id);
+        Reported r = null;
+        if (reported.isPresent()) {
+            r = reported.get();
+        }
+        return r;
+    }
+
+    @Override
+    public void deleteReportedById(int id) {
+        reportedRepo.deleteById(id);
     }
 
     @Override
@@ -178,6 +326,20 @@ public class AppServiceClass implements AppService {
     }
 
     @Override
+    public void deleteReportedCommentById(int id) {
+        reportedCommentRepo.deleteById(id);
+    }
+
+    @Override
+    public void deleteCommentsFromFileById(int fileId) {
+        List<Comments> commentsToDelete = commentRepo.findAllByFileID(fileId);
+        for (Comments c : commentsToDelete) {
+            commentRepo.delete(c);
+        }
+    }
+
+    @Override
+    @Transactional
     public Comments findCommentById(int id) {
         Optional<Comments> comment = commentRepo.findById(id);
         Comments cmt = null;
@@ -187,18 +349,40 @@ public class AppServiceClass implements AppService {
         return cmt;
     }
 
-    private Collection<SimpleGrantedAuthority> mapToAuthorities(Collection<Authority> authorities) {
-        System.out.println("converting roles...");
-        return authorities.stream().map(a -> new SimpleGrantedAuthority(a.getAuthority())).collect(Collectors.toList());
+    @Override
+    @Transactional
+    public List<ReportedComments> findAllReportedComments() {
+        return reportedCommentRepo.findAll();
     }
 
     @Override
-    @Transactional
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        Account account = accountRepo.findByName(s);
-        if (account == null)
-            throw new UsernameNotFoundException("Account not found");
-        return new User(account.getName(), account.getPassword(), mapToAuthorities(account.getAuthorities()));
+    public void saveCubby(Cubby cubby) {
+        cubbyRepo.save(cubby);
     }
+
+    @Override
+    public List<Cubby> findAllByEmail(String email) {
+        return cubbyRepo.findAllByEmail(email);
+    }
+
+    @Override
+    public List<Cubby> findAllByFileId(int id) {
+        return cubbyRepo.findAllByFileID(id);
+    }
+
+    @Override
+    public Cubby findCubbyById(int id) {
+        Optional<Cubby> cubby = cubbyRepo.findById(id);
+        Cubby c = null;
+        if (cubby.isPresent())
+            c = cubby.get();
+        return c;
+    }
+
+    @Override
+    public void deleteCubby(Cubby cubby) {
+        cubbyRepo.delete(cubby);
+    }
+
 
 }
