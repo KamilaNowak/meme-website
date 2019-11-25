@@ -1,5 +1,6 @@
 package com.nowak.SpringBoot.Thymeleaf.controllers;
 
+import ch.qos.logback.core.util.FileSize;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -42,6 +45,7 @@ public class S3Controller {
 
     @Value("${aws.bucket.name}")
     private String bucketName;
+
 
     BasicAWSCredentials credentials;
     AmazonS3 amazonS3;
@@ -97,7 +101,18 @@ public class S3Controller {
 
         } catch (IOException e) {
             model.addAttribute("upload_error", e.getMessage());
+            return "upload-meme";
         }
+        catch(MaxUploadSizeExceededException e){
+            model.addAttribute("upload_error","Maximum file size exceed!");
+            System.out.println("MMMMMMMMMMMMMMMMMMMMMMAXXXXXXXXXXXXXXXX");
+            return "upload-meme";
+        }
+        return "upload-meme";
+    }
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public String handleMultipartException(MultipartException e, Model model) {
+        model.addAttribute("upload_error","Maximum file size exceed!");
         return "upload-meme";
     }
 
@@ -106,43 +121,36 @@ public class S3Controller {
                                      HttpServletRequest httpServletRequest,
                                      @Valid @ModelAttribute("account") AccountModel accountModel, BindingResult bindingResult, Model model) {
         Account existUser = appService.findByName(accountModel.getName());
-//        if (existUser != null) {
-//            model.addAttribute("edit_error", "This username is taken. Please choose another one");
-//            return "account-edit";
-//        }
-//        Account existEmail = appService.findByEmail(accountModel.getEmail());
-//        if (existEmail != null) {
-//            model.addAttribute("edit_error", "Account with that e-mail already exists. Please choose another one");
-//            return "account-edit";
-//        }
         if (bindingResult.hasErrors()) {
             model.addAttribute("edit_error", bindingResult.getFieldError().getDefaultMessage());
             return "account-edit";
         } else {
             try {
-                InputStream inputStream = file.getInputStream();
-                amazonS3.putObject(new PutObjectRequest(bucketName,
-                        file.getOriginalFilename(), inputStream, objectMetadata)
-                        .withCannedAcl(CannedAccessControlList.PublicRead));
-
-                S3Object photo = amazonS3.getObject(new GetObjectRequest(bucketName,file.getOriginalFilename()));
-                String photoPath = photo.getObjectContent().getHttpRequest().getURI().toString();
-                httpServletRequest.setAttribute("file", photoPath);
+                Account account = appService.getLoggedAccount();
                 String name = accountModel.getName();
                 String email = accountModel.getEmail();
-                Account account = appService.getLoggedAccount();
-                account.setPhoto(photoPath);
+                if (file.getSize() > 0) {
+                    InputStream inputStream = file.getInputStream();
+                    amazonS3.putObject(new PutObjectRequest(bucketName,
+                            file.getOriginalFilename(), inputStream, objectMetadata)
+                            .withCannedAcl(CannedAccessControlList.PublicRead));
+
+                    S3Object photo = amazonS3.getObject(new GetObjectRequest(bucketName, file.getOriginalFilename()));
+                    String photoPath = photo.getObjectContent().getHttpRequest().getURI().toString();
+                    httpServletRequest.setAttribute("file", photoPath);
+                    account.setPhoto(photoPath);
+                }
                 account.setName(name);
                 account.setEmail(email);
                 appService.save(account);
 
-                model.addAttribute("edit_success", "Account updated");
+                model.addAttribute("edit_success", "Account updated.\n PLEASE RELOGIN ");
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
         }
-        return"account-edit";
-}
+        return "account-edit";
+    }
 }

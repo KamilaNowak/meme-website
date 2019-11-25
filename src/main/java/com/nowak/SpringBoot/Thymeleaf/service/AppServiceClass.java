@@ -22,6 +22,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
@@ -97,9 +98,21 @@ public class AppServiceClass implements AppService {
     @Transactional
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         Account account = accountRepo.findByName(s);
+        System.out.println(account.getMute() + "   " + new Date());
         if (account == null)
             throw new UsernameNotFoundException("Account not found");
-        return new User(account.getName(), account.getPassword(), mapToAuthorities(account.getAuthorities()));
+        if (account.getMute().before(new Date())) {
+            Date today = new Date();
+           // Date muteDate = new Date(today.getTime() - 9999 * (1000 * 60 * 60 * 24));
+        //    Date muteDate = new Date();
+          //  account.setMute(muteDate);
+            account.setEnabled(true);
+            return new User(account.getName(), account.getPassword(), account.isEnabled(), true, true, true, mapToAuthorities(account.getAuthorities()));
+        } else if (account.getMute().after(new Date())) {
+            throw new UsernameNotFoundException("Account locked until: " + account.getMute());
+        } else {
+            throw new UsernameNotFoundException("Account not found");
+        }
     }
 
     @Override
@@ -256,8 +269,6 @@ public class AppServiceClass implements AppService {
     @Override
     public void deleteCommentAndReportedComment(int id) {
         ReportedComments rc = reportedCommentRepo.findById(id);
-        System.out.println(rc.getComment() + " " + rc.getReportingUser());
-        System.out.println(rc.getCommentID());
         int commentId = rc.getCommentID();
         System.out.println(commentId);
         reportedCommentRepo.deleteById(id);
@@ -423,6 +434,11 @@ public class AppServiceClass implements AppService {
     @Override
     public void deleteUserFileLike(UserFileLikes userFileLike) {
         userFileLikesRepo.delete(userFileLike);
+    }
+
+    @Override
+    public List<UserFileLikes> findAllLikes() {
+        return userFileLikesRepo.findAll();
     }
 
 

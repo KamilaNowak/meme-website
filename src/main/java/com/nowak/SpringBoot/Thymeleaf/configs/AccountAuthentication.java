@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Date;
 
 @Component
 public class AccountAuthentication implements AuthenticationSuccessHandler {
@@ -24,8 +25,9 @@ public class AccountAuthentication implements AuthenticationSuccessHandler {
         System.out.println("In auth......");
          String name = authentication.getName();
          Account account = appService.findByName(name);
-         HttpSession httpSession = httpServletRequest.getSession();
-         httpSession.setAttribute("account",account);
-         httpServletResponse.sendRedirect(httpServletRequest.getContextPath()+"/");
+             HttpSession httpSession = httpServletRequest.getSession();
+             httpSession.setAttribute("account", account);
+             httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/");
+
     }
 }

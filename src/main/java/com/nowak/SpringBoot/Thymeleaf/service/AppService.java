@@ -104,5 +104,6 @@ public interface AppService extends UserDetailsService {
 
     void deleteUserFileLike(UserFileLikes userFileLike);
 
+    List<UserFileLikes> findAllLikes();
 
 }

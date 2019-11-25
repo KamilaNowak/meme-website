@@ -4,35 +4,45 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name="reported_comments")
+@Table(name = "reported_comments")
 public class ReportedComments {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
+    @Column(name = "id")
     private int id;
 
-    @Column(name="comment_id")
+    @Column(name = "comment_id")
     private int commentID;
 
     @Column(name = "reporting_user")
     private String reportingUser;
 
     private String userNick;
+    int userID;
     private int fileID;
     private String comment;
     private String photo;
     private Date date;
 
-    public ReportedComments(int id, int commentID,String reportingUser, String userNick, int fileID, String comment, String photo, Date date) {
-        this.id=id;
-        this.commentID=commentID;
+    public ReportedComments(int id, int userID, int commentID, String reportingUser, String userNick, int fileID, String comment, String photo, Date date) {
+        this.userID = userID;
+        this.id = id;
+        this.commentID = commentID;
         this.reportingUser = reportingUser;
         this.userNick = userNick;
         this.fileID = fileID;
         this.comment = comment;
         this.photo = photo;
         this.date = date;
+    }
+
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
     public ReportedComments() {

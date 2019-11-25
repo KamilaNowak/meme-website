@@ -20,6 +20,7 @@ public class Reported {
     @Column(name="reporting_user")
     private String reportingUser;
 
+    private int userID;
     private Date addedDate;
     private String filePath;
     private String addingUser;
@@ -28,7 +29,8 @@ public class Reported {
     public Reported() {
     }
 
-    public Reported(int id, int fileID,String reportingUser, Date addedDate, String filePath, String addingUser,String fileTitle) {
+    public Reported(int id,int userID, int fileID,String reportingUser, Date addedDate, String filePath, String addingUser,String fileTitle) {
+        this.userID = userID;
         this.id=id;
         this.fileID=fileID;
         this.reportingUser = reportingUser;
@@ -36,6 +38,15 @@ public class Reported {
         this.filePath = filePath;
         this.addingUser = addingUser;
         this.fileTitle= fileTitle;
+    }
+
+
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
     public String getFileTitle() {

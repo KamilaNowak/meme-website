@@ -10,18 +10,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://user.fontawesome.com/releases/v5.0.8/css/solid.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 
     <style>
         .image-bg {
-            background-image: url('https://i.imgur.com/Xc46GEN.png');
-            background-attachment:local;
-            width:100%;
-            height:100%;
+        <!-- background-image: url('https://i.imgur.com/Xc46GEN.png');
+        --> background-attachment: local;
+            width: 100%;
+            height: 100%;
             max-width: none;
             position: absolute;
             background-repeat: no-repeat;
@@ -65,8 +65,15 @@
         <img src="https://i.imgur.com/t9gh16j.png" alt="logo" style="width:110px; ">
     </a>
     <div class="pull-right ml-auto" style="width:100%;">
-        <a class="btn btn-outline-light mr-2 " style="   border-radius: 35px;" th:href="@{/upload}">Upload meme</a>
+        <div class="input-gorup">
+        <a th:href="@{/add-meme}" class="btn btn-outline-light mr-2" style=" border-radius: 35px;">Upload
+            meme </a>
         <a th:href="@{/}" class="btn btn-danger ml-" style="   border-radius: 35px;">Main page</a>
+
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class=" btn btn-warning ml-2" style="border-radius: 35px">Logout</button>
+        </form>
+    </div>
     </div>
 </nav>
 
@@ -86,17 +93,13 @@
                     <li class="nav-item">
                         <a class="nav-link " data-toggle="pill" href="#manageUsers">Manage users</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link " data-toggle="pill" href="#managePosts">Manage posts</a>
-                    </li>
                 </ul>
 
                 <div class="tab-content mt-3 ml-3 mr-3 mb-3">
-                    <div id="reportedPosts" class="tab-pane fade in active">
+                    <div id="reportedPosts" class="tab-pane">
                         <table class="table table-light" style="width:100%">
                             <tbody th:each="temp : ${reportedFiles}">
                             <td>
-
                                 <div class="container-fluid">
                                     <div class="row">
                                         <div class="col-12 mt-2">
@@ -105,26 +108,45 @@
                                                     <div class="img-square-wrapper " style="margin: 0 auto;">
                                                         <img class="" th:src="${temp.filePath}" alt="Card image cap"
                                                              style="height: 210px">
-
                                                     </div>
                                                     <div class="card-body">
-                                                        <h5 class="card-title"><span th:text="${temp.fileTitle}"/></h5>
+                                                        <h5 class="card-title"><span th:text="${temp.fileTitle}"/>
+                                                            <small>Added </small><span
+                                                                    class="badge badge-secondary"> <span
+                                                                    th:text="${temp.addedDate}"/></span>
+                                                        </h5>
                                                         <p class="card-text">
-                                                            <small>Added by user </small><span
-                                                                class="badge badge-secondary"><span
-                                                                th:text="${temp.addingUser}"/></span><br>
-                                                            <small>Reported by user </small><span
-                                                                class="badge badge-secondary"> <span
+                                                            Added by user <span class="badge badge-info"><span
+                                                                th:text="${temp.addingUser}"/></span>
+                                                            <br>Reported by user<span class="badge badge-info"> <span
                                                                 th:text="${temp.reportingUser}"/></span><br>
-                                                            <a class="btn btn-outline-danger" th:href="@{'/admin/delete/' + ${temp.id}}"
+                                                        <p>
+                                                            <a class="btn btn-outline-danger"
+                                                               th:href="@{'/admin/delete/' + ${temp.id}}"
                                                                style="border-radius: 45px;color:black">Delete <i
                                                                     class="fa fa-trash-o"></i></a>
-                                                            <a class="btn btn-outline-dark" href="#"
+                                                            <a class="btn btn-outline-dark"
+                                                               th:href="@{'/admin/ban/' + ${temp.id}}"
                                                                style="border-radius: 45px;">Ban <i
                                                                     class="fa fa-lock"></i></a>
-                                                            <a class="btn btn-outline-info" href="#"
-                                                               style="border-radius: 45px;color:black">Mute <i
-                                                                    class="fa fa-user-times"></i></a>
+                                                            <a class="btn btn-outline-info  dropdown-toggle dropdown-toggle-split"
+                                                               th:href="#" style="border-radius: 45px;"
+                                                               data-toggle="dropdown">Mute
+                                                                <i class="fa fa-lock"></i></a>
+                                                        <div class="dropdown-menu">
+                                                            <a class="dropdown-item"
+                                                               th:href="@{'/admin/mute/' + ${temp.userID} + '/12'} "> 12
+                                                                h</a>
+                                                            <a class="dropdown-item"
+                                                               th:href="@{'/admin/mute/' + ${temp.userID} + '/24'}"> 24
+                                                                h</a>
+                                                            <a class="dropdown-item"
+                                                               th:href="@{'/admin/mute/' + ${temp.userID} + '/72'}"> 3
+                                                                days</a>
+                                                            <a class="dropdown-item"
+                                                               th:href="@{'/admin/mute/' + ${temp.userID} + '/168'}"> 7
+                                                                days</a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -136,7 +158,7 @@
                         </table>
                     </div>
 
-                    <div id="reportedComments" class="tab-pane fade in active">
+                    <div id="reportedComments" class="tab-pane">
                         <table class="table table-light" style="width:100%">
                             <tbody th:each="rc : ${reportedCommentsList}">
                             <td>
@@ -154,14 +176,28 @@
                                                     <div class="alert alert-secondary" style="border-radius: 45px;">
                                                         <span th:text="${rc.comment}"/>
                                                     </div>
-                                                    <a class="btn btn-outline-danger" th:href="@{'/admin/comment/delete/' + ${rc.id}}"
+                                                    <a class="btn btn-outline-danger"
+                                                       th:href="@{'/admin/comment/delete/' + ${rc.id}}"
                                                        style="border-radius: 45px;color:black">Delete <i
                                                             class="fa fa-trash-o"></i></a>
-                                                    <a class="btn btn-outline-dark" href="#"
+                                                    <a class="btn btn-outline-dark"
+                                                       th:href="@{'/admin/ban/' + ${rc.id}}"
                                                        style="border-radius: 45px;">Ban <i class="fa fa-lock"></i></a>
-                                                    <a class="btn btn-outline-info" href="#"
-                                                       style="border-radius: 45px;color:black">Mute <i
-                                                            class="fa fa-user-times"></i></a>
+                                                    <a class="btn btn-outline-info  dropdown-toggle dropdown-toggle-split"
+                                                       href="#" style="border-radius: 45px;" data-toggle="dropdown">Mute
+                                                        <i class="fa fa-lock"></i></a>
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item"
+                                                           th:href="@{'/admin/mute/' + ${rc.userID} + '/12'} "> 12 h</a>
+                                                        <a class="dropdown-item"
+                                                           th:href="@{'/admin/mute/' + ${rc.userID} + '/24'}"> 24 h</a>
+                                                        <a class="dropdown-item"
+                                                           th:href="@{'/admin/mute/' + ${rc.userID} + '/72'}"> 3
+                                                            days</a>
+                                                        <a class="dropdown-item"
+                                                           th:href="@{'/admin/mute/' + ${rc.userID} + '/168'}"> 7
+                                                            days</a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -174,28 +210,49 @@
                         </table>
                     </div>
 
-                    <div id="manageUsers" class="tab-pane fade in active">
+                    <div id="manageUsers" class="tab-pane">
                         <table class="table table-light" style="width:100%">
                             <tbody th:each="acc : ${accounts}">
                             <td>
                                 <div class="container-fluid">
                                     <div class="row">
-                                        <div class="col-12 mt-2">
-                                            <div class="alert alert-secondary"  style="border-radius: 65px;">
+                                        <div class="col-12 mt-1">
+                                            <div class="alert alert-secondary" style="border-radius: 25px;">
                                                 <div class="media border p-3" style="border-radius: 25px;">
 
-                                                    <img th:src="${acc.photo}" alt="" class="mr-3 mt-3 "
+                                                    <img th:src="${acc.photo}" alt="" class="mr-3 mt-2 "
                                                          style="width:80px;height:80px;border-radius: 450px;">
                                                     <div class="media-body">
                                                         <h4><span th:text="${acc.name}"/><small><i> Account ID #<span
                                                                 th:text="${acc.id}"/></i></small></h4>
-                                                        <p>Email address <span th:text="${acc.email}"/>
+                                                        Account enabled <span class="badge badge-danger"><span
+                                                            th:text="${acc.enabled}"/></span>
+                                                        <br>Email address <span class="badge badge-info"><span
+                                                            th:text="${acc.email}"/></span>
+                                                        <br>Last mute date <span class="badge badge-info"><span
+                                                            th:text="${acc.mute}"/></span>
 
-                                                </div>
+
+                                                    </div>
                                                     <br>
-                                                    <a class="btn btn-outline-danger"  href="#" style="border-radius: 45px;">Delete  <i class="fa fa-trash-o"></i></a>
-                                                    <a class="btn btn-outline-dark" href="#" style="border-radius: 45px;">Ban <i class="fa fa-lock"></i></a>
-                                                    <a class="btn btn-outline-info" href="#" style="border-radius: 45px;">Mute <i class="fa fa-lock"></i></a>
+                                                    <a class="btn btn-outline-danger" href="#"
+                                                       style="border-radius: 45px;">Delete <i class="fa fa-trash-o"></i></a>
+                                                    <a class="btn btn-outline-dark"
+                                                       th:href="@{'/admin/ban/' + ${acc.id}}"
+                                                       style="border-radius: 45px;">Ban <i class="fa fa-lock"></i></a>
+                                                    <a class="btn btn-outline-info  dropdown-toggle dropdown-toggle-split"
+                                                       href="#" style="border-radius: 45px;" data-toggle="dropdown">Mute
+                                                        <i class="fa fa-lock"></i></a>
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item"
+                                                           th:href="@{'/admin/mute/' + ${acc.id} + '/12'} "> 12 h</a>
+                                                        <a class="dropdown-item"
+                                                           th:href="@{'/admin/mute/' + ${acc.id} + '/24'}"> 24 h</a>
+                                                        <a class="dropdown-item"
+                                                           th:href="@{'/admin/mute/' + ${acc.id} + '/72'}"> 3 days</a>
+                                                        <a class="dropdown-item"
+                                                           th:href="@{'/admin/mute/' + ${acc.id} + '/168'}"> 7 days</a>
+                                                    </div>
 
                                                 </div>
                                             </div>
@@ -208,9 +265,6 @@
                         </table>
                     </div>
 
-                    <div id="managePosts" class="tab-pane fade in active">
-                        posts
-                    </div>
                 </div>
                 <br>
             </div>

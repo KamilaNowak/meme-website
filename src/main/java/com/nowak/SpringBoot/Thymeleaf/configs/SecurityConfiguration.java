@@ -28,39 +28,42 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder managerBuilder) throws Exception {
         managerBuilder.authenticationProvider(authenticationProvider());
     }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/add-meme/**").permitAll()
-                .antMatchers("/account/**").hasRole("USER")
-                .antMatchers("/like/**").hasRole("USER")
-                .antMatchers("/dislike/**").hasRole("USER")
-                .antMatchers("/comment/**").hasRole("USER")
+                .antMatchers("/add-meme/**").hasRole("USER")
+                .antMatchers("/account/**").hasAnyRole("USER", "MODERATOR")
+                .antMatchers("/cubby/**").hasAnyRole("USER", "MODERATOR")
+                .antMatchers("/unpin/**").hasAnyRole("USER", "MODERATOR")
+                .antMatchers("/like/**").hasAnyRole("USER", "MODERATOR")
+                .antMatchers("/dislike/**").hasAnyRole("USER", "MODERATOR")
+                .antMatchers("/comment/**").hasAnyRole("USER", "MODERATOR")
                 .antMatchers("/report/**").hasRole("USER")
-         //       .antMatchers("/root/**").hasRole("MODERATOR")
+                .antMatchers("/admin/**").hasRole("MODERATOR")
                 .and()
                 .formLogin()
-                    .loginPage("/login")
-                    .loginProcessingUrl("/proceedLogin")
-                  //  .defaultSuccessUrl("/")   //auth error with it
-                    .successHandler(accountAuthentication)
-                    .permitAll()
+                .loginPage("/login")
+                .loginProcessingUrl("/proceedLogin")
+                //  .defaultSuccessUrl("/")   //auth error with it
+                .successHandler(accountAuthentication)
+                .permitAll()
                 .and()
-                    .logout()
-                    .permitAll()
-                .and()
-                .exceptionHandling()
-                .accessDeniedPage("/error");
+                .logout()
+                .permitAll()
+                    .and()
+                    .exceptionHandling()
+                    .accessDeniedPage("/error");
     }
 
     @Bean
-    public BCryptPasswordEncoder passwordEncoder(){
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public DaoAuthenticationProvider authenticationProvider(){
+    public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(passwordEncoder());
         provider.setUserDetailsService(appService);

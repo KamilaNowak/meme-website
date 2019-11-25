@@ -59,7 +59,7 @@ public class RegistrationController {
             Account account = appService.convertToAccount(accountModel);
             account.setPhoto("https://dizzys3.s3.eu-central-1.amazonaws.com/unknow.png");
             account.setConfirmToken(UUID.randomUUID().toString());
-
+            account.setEnabled(true);
             appService.save(account);
 
             String accountUrl = servletRequest.getScheme() + "://" + servletRequest.getServerName() + ":" + servletRequest.getServerPort(); //manually added port -check later TODO

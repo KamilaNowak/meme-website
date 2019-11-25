@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name="files")
@@ -31,6 +32,7 @@ public class File {
 
     @Column(name="dislikes")
     private int dislikes;
+
 
     @Column(name="date",columnDefinition = "DATETIME")
     @Temporal(TemporalType.TIMESTAMP)

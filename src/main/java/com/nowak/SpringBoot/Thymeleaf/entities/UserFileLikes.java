@@ -16,6 +16,22 @@ public class UserFileLikes {
     @Column(name="id_file")
     private int fileId;
 
+    private String userNick;
+
+    public UserFileLikes(int userId, int fileId, String userNick) {
+        this.userId = userId;
+        this.fileId = fileId;
+        this.userNick = userNick;
+    }
+
+    public String getUserNick() {
+        return userNick;
+    }
+
+    public void setUserNick(String userNick) {
+        this.userNick = userNick;
+    }
+
     public UserFileLikes() {
     }
 

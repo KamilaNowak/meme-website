@@ -34,6 +34,7 @@ public class LoginController {
         return "login-page";
     }
 
+
     @RequestMapping(value = "/reset", method = RequestMethod.GET)
     public String showResetPasswordPage(Model model) {
         model.addAttribute("emailModel", new EmailModel());

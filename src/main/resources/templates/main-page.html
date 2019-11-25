@@ -16,10 +16,10 @@
         }
 
         .image-bg {
-            background-image: url('http://wallpoper.com/images/00/28/03/98/outer-space_00280398.png');
-            background-attachment:local;
-            width:100%;
-            height:100%;
+        <!--   background-image: url('http://wallpoper.com/images/00/28/03/98/outer-space_00280398.png');-->
+            background-attachment: local;
+            width: 100%;
+            height: 100%;
             max-width: none;
             position: absolute;
             background-repeat: no-repeat;
@@ -38,9 +38,10 @@
             <img src="https://i.imgur.com/t9gh16j.png" alt="logo" style="width:110px;">
         </a>
         <div class="pull-right ml-auto" style="width:100%;">
-            <a th:href="@{/add-meme}" class="btn btn-outline-light mr-2"  style="   border-radius: 35px;">Upload meme </a>
-            <a th:href="@{/login}" class="btn btn-danger ml-"  style="   border-radius: 35px;">Log in</a>
-            <a th:href="@{/account}" class="btn btn-danger"  style="   border-radius: 35px;">Account</a>
+            <a th:href="@{/add-meme}" class="btn btn-outline-light mr-2" style="   border-radius: 35px;">Upload
+                meme </a>
+            <a th:href="@{/login}" class="btn btn-danger ml-" style="   border-radius: 35px;">Log in</a>
+            <a th:href="@{/account}" class="btn btn-danger" style="   border-radius: 35px;">Account</a>
         </div>
     </nav>
     <div class="container mt-3">
@@ -60,14 +61,18 @@
                                 <img class="card-img-top" th:src="${temp.path}" alt="" style="size:auto;">
                             </div>
                             <div class="card-footer" style="">
-                                <a class="btn btn-primary" style="color:white" th:href="@{'/like/' + ${temp.id}}">Like
+                                <a class="btn btn-primary" style="color:white"
+                                   th:href="@{'/like/' + ${temp.id}}"
+                                   data-toggle="tooltip" data-placement="top" th:title="${likes}">Like
                                     <i class="fa fa-thumbs-o-up"></i> <span class="badge badge-light">
-                                <span th:text="${temp.likes}"/></span></a>
+                                                      <span th:text="${temp.likes}"/></span></a>
+
                                 <a class="btn btn-danger" th:href="@{'/dislike/' + ${temp.id}}" style="color:white">Dislike
                                     <i class="fa fa-thumbs-o-down"></i> <span class="badge badge-light">
                                 <span th:text="${temp.dislikes}"/></span></a>
-                                <a class="btn btn-warning" style="color:white" th:href="@{'/cubby/' + ${temp.id}}">Save to cubby <i
-                                        class="fa fa-folder-o"></i> </a>
+                                <a class="btn btn-warning" style="color:white" th:href="@{'/cubby/' + ${temp.id}}">Save
+                                    to cubby <i
+                                            class="fa fa-folder-o"></i> </a>
                                 <a class="btn btn-success" style="color:white" th:href="${temp.path}">Download <i
                                         class="fa fa-download"></i> </a>
                                 <a class="btn btn-dark" style="color:white" th:href="@{'/report/' + ${temp.id}}"
@@ -80,7 +85,8 @@
                                     <tbody id="fileComments">
                                     <tr th:each="cmt: ${comments}" th:if="${cmt.fileID} == ${temp.id}">
                                         <td>
-                                            <img th:src="${cmt.photo}"  alt="" style="border-radius:450px; width:25px; height:25px;"/>
+                                            <img th:src="${cmt.photo}" alt=""
+                                                 style="border-radius:450px; width:25px; height:25px;"/>
                                         </td>
                                         <td>
                                             <span class="badge badge-secondary"><span th:text="${cmt.userNick}"/></span>

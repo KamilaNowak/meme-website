@@ -23,8 +23,6 @@ public class FeatureController {
         this.appService = appService;
     }
 
-    @Autowired
-    private EmailService emailService;
 
     @RequestMapping(value = "/like/{id}")
     public String likeFile(@PathVariable("id") int id) {
@@ -157,24 +155,6 @@ public class FeatureController {
         return "redirect:/";
     }
 
-    @RequestMapping(value = "/ban/{id}")
-    public String banUser(@PathVariable("id") int id) {
-        Account accountToBan = appService.findAccountById(id);
-
-        SimpleMailMessage informMessageAboutBan = new SimpleMailMessage();
-        informMessageAboutBan.setTo(accountToBan.getEmail());
-        informMessageAboutBan.setSubject("DiZZy - information about banned account");
-        informMessageAboutBan.setText("Dear " + accountToBan.getName() + ", " + "\nYou account has been banned permanently, because of broken DizzyⓇ meme website rules.\nYour account could not be restored.\n\nDiZZy Support.");
-        informMessageAboutBan.setFrom("noreply@DiZZy.com");
-        emailService.sendEmail(informMessageAboutBan);
-        return "redirect:/admin";
-    }
-
-    @RequestMapping(value = "/admin/comment/delete/{id}")
-    public String deleteComment(@PathVariable("id") int id) {
-        appService.deleteCommentAndReportedComment(id);
-        return "redirect:/admin";
-    }
 
     @RequestMapping(value = "/cubby/{id}")
     public String saveToCubby(@PathVariable("id") int id) {

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.util.Collection;
+import java.util.Date;
 
 @Entity
 @Table(name="account")
@@ -30,6 +31,29 @@ public class Account {
 
     @Column(name = "confirm_token")
     private String confirmToken;
+
+    @Column(name="enabled")
+    private boolean enabled;
+
+    @Column(name="mute",columnDefinition = "DATETIME")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date mute;
+
+    public Date getMute() {
+        return mute;
+    }
+
+    public void setMute(Date mute) {
+        this.mute = mute;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 
     public String getConfirmToken() {
         return confirmToken;
