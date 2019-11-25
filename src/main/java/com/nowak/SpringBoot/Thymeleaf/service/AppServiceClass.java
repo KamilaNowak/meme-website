@@ -441,5 +441,25 @@ public class AppServiceClass implements AppService {
         return userFileLikesRepo.findAll();
     }
 
+    @Override
+    public List<UserFileLikes> findAllUserFileLikesByFileId(int id) {
+        return userFileLikesRepo.findAllByFileId(id);
+    }
+
+    @Override
+    public List<UserFileDislikes> findAllUserFileDislikesByFileId(int fileId) {
+        return userFileDislikesRepo.findAllByFileId(fileId);
+    }
+
+    @Override
+    public UserFileLikes findUserFileLikesByFileIdAndUserId(int fileId, int userId) {
+        return userFileLikesRepo.findByFileIdAndUserId(fileId,userId);
+    }
+
+    @Override
+    public UserFileDislikes findUserFileDislikesByFileIdAndUserId(int fileId, int userId) {
+        return userFileDislikesRepo.findByFileIdAndUserId(fileId,userId);
+    }
+
 
 }

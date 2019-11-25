@@ -106,4 +106,11 @@ public interface AppService extends UserDetailsService {
 
     List<UserFileLikes> findAllLikes();
 
+    List<UserFileLikes> findAllUserFileLikesByFileId(int id);
+
+    List<UserFileDislikes> findAllUserFileDislikesByFileId(int fileId);
+
+    UserFileLikes findUserFileLikesByFileIdAndUserId( int fileId, int userId);
+
+    UserFileDislikes findUserFileDislikesByFileIdAndUserId(int fileId, int userId);
 }

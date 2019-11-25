@@ -78,18 +78,10 @@
                 </div>
                 <h3>Update account</h3>
                 <div class="col-12 form-input ">
-                    <form th:action="@{/proceedEdit}" th:object="${account}" enctype="multipart/form-data" method="post">
+                    <form th:action="@{/proceedEdit}" enctype="multipart/form-data" method="post">
                         <br>
                         <div class="form-group">
                             <input type="file"  name="fileAccount"/>
-                        </div>
-                        <div class="form-group">
-                            <input type="text"  th:field="*{name}" class="form-control" style=" border-radius: 15px;
-font-size: 20px;"placeholder="Name">
-                        </div>
-                        <div class="form-group">
-                            <input type="text"  th:field="*{email}" class="form-control" style=" border-radius: 15px;
-font-size: 20px;" placeholder="E-mail">
                         </div>
                         <hr>
                         <div class="form-group text-center">

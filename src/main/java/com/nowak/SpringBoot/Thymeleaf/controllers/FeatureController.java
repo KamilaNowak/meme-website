@@ -28,8 +28,8 @@ public class FeatureController {
     public String likeFile(@PathVariable("id") int id) {
         File file = appService.findById(id);
         Account account = appService.getLoggedAccount();
-        UserFileLikes existLike = appService.findUserFileLikeByFileId(id);
-        UserFileDislikes existDislike =appService.findUserFileDislikeByFileId(id);
+        UserFileLikes existLike = appService.findUserFileLikesByFileIdAndUserId(file.getId(),account.getId());
+        UserFileDislikes existDislike =appService.findUserFileDislikesByFileIdAndUserId(file.getId(),account.getId());
         if (existLike != null) {
             if ((existLike.getUserId() != account.getId())) {
                 int likes = file.getLikes();
@@ -78,8 +78,8 @@ public class FeatureController {
     public String dislikeFile(@PathVariable("id") int id) {
         File file = appService.findById(id);
         Account account = appService.getLoggedAccount();
-        UserFileDislikes existDislike = appService.findUserFileDislikeByFileId(id);
-        UserFileLikes existLike = appService.findUserFileLikeByFileId(id);
+        UserFileDislikes existDislike = appService.findUserFileDislikesByFileIdAndUserId(file.getId(),account.getId());
+        UserFileLikes existLike = appService.findUserFileLikesByFileIdAndUserId(file.getId(),account.getId());
         if (existDislike != null) {
             if (existDislike.getUserId() != account.getId()) {
                 int dislikes = file.getDislikes();

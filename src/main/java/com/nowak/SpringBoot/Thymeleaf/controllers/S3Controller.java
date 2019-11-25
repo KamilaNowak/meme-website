@@ -118,17 +118,9 @@ public class S3Controller {
 
     @RequestMapping(value = "/proceedEdit", method = RequestMethod.POST)
     public String proceedEditAccount(@RequestParam("fileAccount") MultipartFile file,
-                                     HttpServletRequest httpServletRequest,
-                                     @Valid @ModelAttribute("account") AccountModel accountModel, BindingResult bindingResult, Model model) {
-        Account existUser = appService.findByName(accountModel.getName());
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("edit_error", bindingResult.getFieldError().getDefaultMessage());
-            return "account-edit";
-        } else {
+                                     HttpServletRequest httpServletRequest, Model model) {
             try {
                 Account account = appService.getLoggedAccount();
-                String name = accountModel.getName();
-                String email = accountModel.getEmail();
                 if (file.getSize() > 0) {
                     InputStream inputStream = file.getInputStream();
                     amazonS3.putObject(new PutObjectRequest(bucketName,
@@ -140,8 +132,6 @@ public class S3Controller {
                     httpServletRequest.setAttribute("file", photoPath);
                     account.setPhoto(photoPath);
                 }
-                account.setName(name);
-                account.setEmail(email);
                 appService.save(account);
 
                 model.addAttribute("edit_success", "Account updated.\n PLEASE RELOGIN ");
@@ -149,8 +139,7 @@ public class S3Controller {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-        }
         return "account-edit";
-    }
+
+}
 }
