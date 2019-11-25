@@ -1,0 +1,1 @@
+-Dspring.datasource.url=jdbc:jdbc:mysql://localhost:3306/demo_account?useSSL=false&serverTimezone=UTC
