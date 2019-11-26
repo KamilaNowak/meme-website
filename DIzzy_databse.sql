@@ -38,7 +38,7 @@ CONSTRAINT `id_ath_fkey` FOREIGN KEY(`id_authority`) REFERENCES `authorities`(`i
 
 
 INSERT INTO `authorities` (authority) VALUES
-('ROLE_MODERATOR'),
+('ROLE_ADMIN'),
 ('ROLE_USER');
 
 

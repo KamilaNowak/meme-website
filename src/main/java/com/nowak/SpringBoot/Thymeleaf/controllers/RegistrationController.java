@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.naming.Binding;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.UUID;
 
 @Controller
@@ -60,6 +61,9 @@ public class RegistrationController {
             account.setPhoto("https://dizzys3.s3.eu-central-1.amazonaws.com/unknow.png");
             account.setConfirmToken(UUID.randomUUID().toString());
             account.setEnabled(true);
+            Date today = new Date();
+            Date muteDate = new Date(today.getTime());
+            account.setMute(muteDate);
             appService.save(account);
 
             String accountUrl = servletRequest.getScheme() + "://" + servletRequest.getServerName() + ":" + servletRequest.getServerPort(); //manually added port -check later TODO
