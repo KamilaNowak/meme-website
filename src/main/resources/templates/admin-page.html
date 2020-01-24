@@ -2,7 +2,7 @@
 <html xmlns:th="https://www.thymeleaf.org">
 <html lang="en">
 <head>
-    <title>Bootstrap Example</title>
+    <title>Dizzy</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -73,6 +73,11 @@
         <form th:action="@{/logout}" method="post">
             <button type="submit" class=" btn btn-warning ml-2" style="border-radius: 35px">Logout</button>
         </form>
+            <form>
+                <button th:action="@{/admin}" class="btn btn-outline-success" style="border-radius: 35px"> Administration
+                    Tools</button>
+            </form>
+
     </div>
     </div>
 </nav>

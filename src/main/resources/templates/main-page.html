@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
-<html xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Login page</title>
+    <title>Dizzy</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -44,10 +43,16 @@
                 <a th:href="@{/login}" class="btn btn-danger ml-" style="   border-radius: 35px;">Log in</a>
                 <a th:href="@{/account}" class="btn btn-danger" style="   border-radius: 35px;">Account</a>
 
-                <div sec:authorize="hasRole('ADMIN')">
-                    <a th:href="@{/admin}" class="btn btn-outline-success" style="border-radius: 35px"> Administration
-                        Tools</a>
+                <br>
+                <div sec:authorize access="hasRole('ROLE_ADMIN')">
+                    <form>
+                        <button th:action="@{/admin}" class="btn btn-outline-success" style="border-radius: 35px">
+                            Administration
+                            Tools
+                        </button>
+                    </form>
                 </div>
+
             </div>
         </div>
     </nav>
@@ -133,5 +138,6 @@
         </table>
     </div>
 </div>
+
 </body>
 </html>

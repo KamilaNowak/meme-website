@@ -1,0 +1,3 @@
+CREATE TABLE subscriptions ( id BIGSERIAL NOT NULL PRIMARY KEY, subscription VARCHAR(28) );
+CREATE TABLE users ( id BIGSERIAL NOT NULL PRIMARY KEY, email VARCHAR(128), password VARCHAR(128), phonenumber VARCHAR(12) )
+CREATE TABLE users_subs ( user_id INTEGER NOT NULL, sub_id INTEGER NOT NULL, PRIMARY KEY(user_id, sub_id), FOREIGN KEY (user_id) REFERENCES users(id), FOREIGN KEY (sub_id) REFERENCES subscriptions(id) );

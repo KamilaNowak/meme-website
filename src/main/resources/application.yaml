@@ -1,0 +1,10 @@
+spring:
+  profiles:
+    active: @spring.profiles.active@
+
+app:
+    datasource:
+      jdbc-url:jdbc: jdbc:mysql://localhost:3306/demo_account
+      username: hbstudent
+      password: hbstudent
+      pool-size: 30
