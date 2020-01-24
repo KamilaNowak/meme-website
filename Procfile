@@ -1,1 +1,1 @@
--Dspring.datasource.url=jdbc:jdbc:mysql://localhost:3306/demo_account?useSSL=false&serverTimezone=UTC
+web: java -jar target/SpringBoot-Thymeleaf-0.0.1-SNAPSHOT.jar
